@@ -1,0 +1,11 @@
+.view {
+
+}
+
+.form > div {
+    display: inline-block;
+}
+
+.form > div + div {
+    margin-left: 15px;
+}

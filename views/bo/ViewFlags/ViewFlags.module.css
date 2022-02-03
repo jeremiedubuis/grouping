@@ -1,0 +1,66 @@
+.view {
+
+}
+
+.list {
+    max-width: 400px;
+}
+
+.list > li {
+    border: 1px solid var(--color-primary);
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.list >li + li {
+    margin-top: 10px;
+}
+
+.name {
+    flex: 1;
+}
+
+.buttons {
+    display: inline-block;
+}
+
+.buttons  li{
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.values {
+    border-top: 1px solid var(--color-primary);
+    padding: 10px;
+}
+
+.values .value {
+    flex: 1;
+}
+
+.values .option {
+    display: flex;
+    padding: 10px;
+    border-bottom: 1px solid var(--color-border)
+
+}
+
+.values .option > button {
+    display: inline-flex;
+    margin-left: 10px;
+}
+
+.form  {
+    display: flex;
+    align-items: flex-end;
+    max-width: 400px;
+}
+
+.form > div:first-of-type {
+    flex: 1;
+    margin-right: 10px;
+}

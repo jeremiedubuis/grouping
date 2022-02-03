@@ -1,0 +1,41 @@
+.wrapper {
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    width: 400px;
+    max-width: 100%;
+    position: relative;
+    background: var(--color-bg);
+    padding: 20px;
+    max-height: 90%;
+    overflow: auto;
+}
+
+.modal h2 {
+    margin: 0 0 20px;
+    color: var(--color-primary)
+}
+
+.close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: transparent;
+    border: 0;
+}
+
+.close svg {
+    stroke: black;
+    width: 20px;
+    height: 20px;
+}

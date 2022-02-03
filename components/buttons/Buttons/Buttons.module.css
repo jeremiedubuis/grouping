@@ -1,0 +1,29 @@
+.buttons {
+    display: flex;
+    align-items: center;
+    margin: 20px auto 0;
+    max-width: 300px;
+}
+
+.buttons button {
+    height: 40px;
+    border-radius: 8px;
+    border: 0;
+    padding: 5px 10px;
+    cursor: pointer;
+    flex: 1;
+
+}
+
+.buttons button + button {
+    margin-left: 10px;
+}
+
+.buttons button:first-of-type{
+    background: var(--color-primary);
+    color: var(--color-primary-text);
+}
+.buttons button:last-of-type {
+    background: var(--color-secondary);
+    color: var(--color-secondary-text);
+}

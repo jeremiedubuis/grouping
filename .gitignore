@@ -1,0 +1,4 @@
+uploads/*
+!uploads/.gitkeep
+.next
+node_modules

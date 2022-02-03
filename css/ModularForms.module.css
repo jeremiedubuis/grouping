@@ -1,0 +1,48 @@
+.field {
+    position: relative;
+    display: block;
+    padding-bottom: 30px;
+}
+
+
+.field label {
+    display: block;
+    text-transform: uppercase;
+    font-size: var(--font-size-small);
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.field input, .field select, .field textarea {
+    width: 100%;
+    border: 2px solid var(--color-primary);
+    border-radius: 6px;
+    height: 40px;
+    background: var(--color-bg-toned-down);
+    padding: 5px 10px;
+    box-sizing: border-box;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+    background: var(--color-bg);
+}
+
+.field input[type="submit"] {
+    background: var(--color-primary);
+    color: var(--color-primary-text);
+    cursor: pointer;
+}
+
+.fieldError {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+    left: 0;
+    height: 15px;
+    color: var(--color-error);
+    font-size: var(--font-size-small);
+    text-align: right;
+}
+
+.fieldError p {
+    margin: 0;
+}

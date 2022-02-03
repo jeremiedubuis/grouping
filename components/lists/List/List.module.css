@@ -1,0 +1,52 @@
+
+
+.list > li {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.list > li + li {
+    margin-top: 10px;
+}
+
+.list .content {
+    flex: 1;
+
+}
+.list .buttons li {
+    display: inline-block;
+}
+.list .buttons li + li {
+    margin-left: 5px;
+}
+
+.list img {
+    margin-right: 20px;
+    float: left;
+    width: 75px;
+    height: 75px;
+}
+
+.flags{
+    display: inline-block;
+    border-radius: 4px;
+    background: var(--color-bg-toned-down);
+    padding: 2px 5px;
+}
+
+.initials {
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    width: 75px;
+    height: 75px;
+    background: var(--color-primary);
+    color: var(--color-primary-text);
+    font-size: var(--font-size-large);
+}

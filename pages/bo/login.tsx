@@ -1,0 +1,1 @@
+export { ViewLogin as default } from '$views/bo/ViewLogin/ViewLogin';

@@ -1,0 +1,15 @@
+.modal {
+
+}
+
+
+.flags header {
+    padding: 0 0 10px 0;
+}
+.flags .name {
+    display: inline-block;
+}
+.flags  button {
+    display: inline-block;
+    margin-left: 5px;
+}

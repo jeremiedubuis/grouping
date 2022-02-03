@@ -1,0 +1,21 @@
+.nav {
+    height: 100%;
+    flex: 55px 0 0;
+    box-sizing: border-box;
+    padding: 15px 15px;
+    background: var(--color-primary);
+}
+
+.nav li + li {
+    margin-top: 15px;
+}
+
+.nav svg {
+    stroke: var(--color-primary-text);
+    width: 25px;
+    height: 25px;
+}
+
+.antd svg {
+    fill: var(--color-primary-text);
+}

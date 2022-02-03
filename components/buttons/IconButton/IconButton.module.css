@@ -1,0 +1,32 @@
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-secondary);
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    border: 0;
+}
+
+.btn svg {
+    stroke: var(--color-secondary-text);
+}
+
+.square {
+    border-radius: 0;
+}
+
+.small {
+    width: 22px;
+    height: 22px;
+}
+
+.plain {
+    background: var(--color-bg);
+    padding: 0;
+}
+
+.plain svg {
+    stroke: var(--color-secondary);
+}
