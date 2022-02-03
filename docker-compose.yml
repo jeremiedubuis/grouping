@@ -1,20 +1,27 @@
 version: '3.8'
 services:
   mysqldb:
-    image: mysql:5.7
+    image: mysql:5.7.37
     restart: unless-stopped
-    environment:
-      - MYSQL_ROOT_PASSWORD=grouping
-      - MYSQL_DATABASE=grouping
     volumes:
       - db:/var/lib/mysql
-      - ${PWD}/db.sql:/docker-entrypoint-initdb.d/start.sql
+      - ./devops/db.sql:/docker-entrypoint-initdb.d/schema.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'grouping'
+      MYSQL_DATABASE: 'grouping'
+    expose:
+      - "3307"
     ports:
       - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 20
   app:
     container_name: "grouping-app"
     depends_on:
-      - mysqldb
+      mysqldb:
+        condition: service_healthy
     build:
       context: ./
       dockerfile: Dockerfile
