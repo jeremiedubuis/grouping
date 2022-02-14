@@ -3,5 +3,5 @@ COPY . /app/
 WORKDIR /app
 RUN npm install
 RUN npm run build
-COPY dist .next public /app/
+COPY dist public /app/
 CMD npm run start
