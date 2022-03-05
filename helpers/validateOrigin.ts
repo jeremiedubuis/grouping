@@ -2,6 +2,8 @@ import type { Request } from 'polka';
 import { ApiError } from '../api/ApiError';
 
 export const validateOrigin = (req: Request, ignoreOrigin?: boolean) => {
+    //debug
+    return;
     if (ignoreOrigin) return;
 
     if (
