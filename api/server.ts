@@ -1,5 +1,12 @@
+import pkg from '../package.json';
 import { config } from 'dotenv';
-config();
+import path from 'path';
+config({
+    path: path.join(
+        __dirname,
+        process.env.NODE_ENV === 'production' ? '../.env.production' : '../.env'
+    )
+});
 import { parse } from 'url';
 import next from 'next';
 import polka from 'polka';
@@ -10,7 +17,6 @@ const { json } = require('body-parser');
 const cors = require('cors');
 import sirv from 'sirv';
 import fs, { ReadStream } from 'fs';
-import path from 'path';
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -22,7 +28,11 @@ const mw = [
     json(),
     sirv('public', {
         dev
-    })
+    }),
+    (_req: any, res: any, next: any) => {
+        res.setHeader('server', `${pkg.name}@${pkg.version}`);
+        next();
+    }
 ];
 
 if (process.env.CORS) {
