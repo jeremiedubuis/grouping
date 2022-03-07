@@ -10,7 +10,7 @@ export const getTokenCookieOptions = (token: string, deleteCookie?: boolean): Co
     value: token,
     options: {
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: 'strict',
         domain: process.env.COOKIE_DOMAIN,
         path: '/',
         secure: !isStringVarTruthy(process.env.INSECURE_COOKIE),
