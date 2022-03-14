@@ -25,7 +25,9 @@ export const groupRoutes = {
 };
 
 export const groupTypeRoutes = {
-    multiple: `${prefix}/group-types`
+    multiple: `${prefix}/group-types`,
+    single: `${prefix}/group-type`,
+    specific: `${prefix}/group-type/:groupTypeId`
 };
 
 export const entityFlagValueRoutes = {
@@ -46,6 +48,11 @@ export const linkRoutes = {
     single: `${prefix}/link`,
     multiple: `${prefix}/links`,
     specific: `${prefix}/link/:linkId`
+};
+
+export const migrationRoutes = {
+    single: `${prefix}/migration`,
+    multiple: `${prefix}/migrations`
 };
 
 export const pathWithParams = (

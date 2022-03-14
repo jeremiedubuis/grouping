@@ -25,6 +25,9 @@
       ],
       "$views/*": [
         "./views/*"
+      ],
+      "$components/*": [
+        "./components/*"
       ]
     },
     "target": "esnext",

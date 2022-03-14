@@ -50,7 +50,6 @@ app.prepare().then(async () => {
     await init(server);
 
     server.get(process.env.UPLOAD_PATH + '/*', (req: Request, res: ServerResponse) => {
-        console.log(req.url);
         if (/\.\./.test(req.url)) {
             res.statusCode = 404;
             return res.end('NOT_FOUND');

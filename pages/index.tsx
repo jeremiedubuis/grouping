@@ -1,1 +1,1 @@
-export { ViewHome as default } from '$views/bo/ViewHome/ViewHome';
+export { ViewHome as default } from '$views/ViewHome/ViewHome';

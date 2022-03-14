@@ -20,7 +20,6 @@ export class AssetModel extends Model {
 
         let thumbnail;
 
-        console.log(process.cwd(), process.env.UPLOAD_PATH);
         const dirPath = [process.env.UPLOAD_PATH, directory.replace(/^\/|\/$/, '')].join('/');
 
         try {

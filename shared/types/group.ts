@@ -27,3 +27,8 @@ export type GroupWithLinks = Group & {
     groups: Group[];
     individuals: Individual[];
 };
+
+export type GroupType = {
+    id: number;
+    type: string;
+};

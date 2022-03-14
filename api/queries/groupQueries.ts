@@ -29,10 +29,6 @@ const groupDeleteQuery = `
 
 export const groupDelete = (id: string) => sqlValues({ id }, groupDeleteQuery);
 
-export const groupTypesSelect = () => `
-    SELECT type
-    FROM group_types`;
-
 export const groupsSelect = () => `
     SELECT g.id, g.name, g.default_node_value AS defaultNodeValue, g.default_node_color AS defaultNodeColor,
            gt.type, 
@@ -63,3 +59,21 @@ const groupSelectQuery = `
     WHERE g.id = :groupId`;
 
 export const groupSelect = (groupId: number) => sqlValues({ groupId }, groupSelectQuery);
+
+export const groupTypesSelect = () => `
+    SELECT type, id
+    FROM group_types`;
+
+const groupTypeInsertQuery = `
+    INSERT INTO group_types (type)
+    VALUES (:type)`;
+
+export const groupTypeInsert = (type: string) => sqlValues({ type }, groupTypeInsertQuery);
+
+const groupTypeUpdateQuery = `
+    UPDATE group_types
+    SET type = :type
+    WHERE id = :groupTypeId`;
+
+export const groupTypeUpdate = (groupTypeId: number, type: string) =>
+    sqlValues({ groupTypeId, type }, groupTypeUpdateQuery);

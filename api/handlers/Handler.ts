@@ -57,7 +57,7 @@ export class Handler {
         this.res.statusMessage = `Error: ${err.name}`;
         this.res.statusCode = (err as ApiError).code;
         this.res.setHeader('content-type', 'application/json');
-        this.res.end(JSON.stringify({ message: err.message }));
+        this.res.end(err.message);
         return;
     }
 }

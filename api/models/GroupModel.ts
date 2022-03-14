@@ -5,7 +5,9 @@ import {
     groupInsert,
     groupSelect,
     groupsSelect,
+    groupTypeInsert,
     groupTypesSelect,
+    groupTypeUpdate,
     groupUpdate
 } from '$queries/groupQueries';
 import { slugify } from '$helpers/slugify';
@@ -35,11 +37,6 @@ export class GroupModel extends Model {
 
     async delete(groupId) {
         await this.query(groupDelete(groupId));
-    }
-
-    async selectGroupTypes() {
-        const r = await this.query(groupTypesSelect());
-        return r.map(({ type }) => type);
     }
 
     async selectAll() {
@@ -76,5 +73,18 @@ export class GroupModel extends Model {
                 });
             return acc;
         }, null);
+    }
+
+    async selectGroupTypes() {
+        return await this.query(groupTypesSelect());
+    }
+
+    async insertType(type: string) {
+        const { insertId } = await this.query(groupTypeInsert(type));
+        return insertId;
+    }
+
+    async updateType(groupTypeId: number, type: string) {
+        await this.query(groupTypeUpdate(groupTypeId, type));
     }
 }

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ModularFieldType, ModularForm, ModularFormField } from '../react-modulr-forms';
-import { asyncGroupTypesFetch } from '../../async/asyncGroups';
+import { GroupType } from '$types/group';
 
 type FormGroupProps = {
     className?: string;
@@ -8,6 +8,7 @@ type FormGroupProps = {
     submitText: string;
     idSuffix?: string;
     data?: any;
+    groupTypes: GroupType[];
 };
 
 export const FormGroup: React.FC<FormGroupProps> = ({
@@ -15,14 +16,10 @@ export const FormGroup: React.FC<FormGroupProps> = ({
     onSubmit,
     submitText,
     idSuffix = '',
-    data = {}
+    data = {},
+    groupTypes
 }) => {
-    const [groupTypes, setGroupTypes] = useState([]);
     const id = 'form-group' + idSuffix;
-
-    useEffect(() => {
-        asyncGroupTypesFetch().then(setGroupTypes);
-    }, []);
 
     return (
         <ModularForm id={id} className={className} onSubmit={onSubmit}>
@@ -44,7 +41,7 @@ export const FormGroup: React.FC<FormGroupProps> = ({
                 type={ModularFieldType.Select}
                 validation={{ required: true }}
             >
-                {groupTypes.map((type) => (
+                {groupTypes.map(({ type }) => (
                     <option key={type} value={type}>
                         {type}
                     </option>

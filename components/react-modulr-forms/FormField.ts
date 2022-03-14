@@ -114,7 +114,6 @@ export class FormField implements IFormFieldOptions {
     }
 
     setDisabled(disabled: boolean) {
-        console.log(disabled, this.id);
         (document.getElementById(this.id) as ElementType).disabled = disabled;
     }
 }

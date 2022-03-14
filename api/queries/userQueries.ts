@@ -25,3 +25,9 @@ const updateUserQuery = `
 
 export const updateUser = (payload: { userId: number; username?: string; password?: string }) =>
     sqlValues(payload, updateUserQuery);
+
+const deleteUserQuery = `
+    DELETE FROM users
+    WHERE id = :userId`;
+
+export const deleteUser = (userId: number) => sqlValues({ userId }, deleteUserQuery);

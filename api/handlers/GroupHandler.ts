@@ -49,4 +49,14 @@ export class GroupHandler extends Handler {
     async selectFromId(req: Request) {
         return this.success(await new GroupModel().selectFromId(parseInt(req.params.groupId)));
     }
+
+    async createType(req: Request) {
+        const id = await new GroupModel().insertType(req.body.type);
+        return this.success({ id }, 201);
+    }
+
+    async updateType(req: Request) {
+        await new GroupModel().updateType(parseInt(req.params.groupTypeId), req.body.type);
+        return this.success(null, 204);
+    }
 }

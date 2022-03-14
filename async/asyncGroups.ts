@@ -3,11 +3,6 @@ import { groupRoutes, groupTypeRoutes, pathWithParams } from '$shared/uris';
 import type { GroupPayload, GroupWithFlags, GroupWithLinks } from '$types/group';
 import type { Links } from '$types/linkTypes';
 
-export const asyncGroupTypesFetch = () =>
-    apiFetch(groupTypeRoutes.multiple, {
-        method: 'GET'
-    });
-
 export const asyncGroupCreate = (payload: GroupPayload) =>
     apiFetch(groupRoutes.single, {
         method: 'POST',
@@ -38,3 +33,24 @@ export const asyncGroupFetch = (groupId: number | string): Promise<GroupWithLink
 
 export const asyncGroupLinksFetch = (groupId: number): Promise<Links> =>
     apiFetch(pathWithParams(groupRoutes.links, { groupId: groupId.toString() }), { method: 'GET' });
+
+export const asyncGroupTypesFetch = () =>
+    apiFetch(groupTypeRoutes.multiple, {
+        method: 'GET'
+    });
+
+export const asyncGroupTypeCreate = (type: string) =>
+    apiFetch(groupTypeRoutes.single, {
+        method: 'POST',
+        body: {
+            type
+        }
+    });
+
+export const asyncGroupTypeUpdate = (groupTypeId: number, type: string) =>
+    apiFetch(pathWithParams(groupTypeRoutes.specific, { groupTypeId: groupTypeId.toString() }), {
+        method: 'POST',
+        body: {
+            type
+        }
+    });

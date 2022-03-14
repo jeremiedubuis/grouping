@@ -5,14 +5,14 @@ import {
     asyncIndividualDelete,
     asyncIndividualsFetch
 } from '../../../async/asyncIndividuals';
-import { FormIndividual } from '../../../components/forms/FormIndividual';
+import { FormIndividual } from '$components/forms/FormIndividual';
 import { FiEdit, FiFlag, FiLink, FiTrash } from 'react-icons/fi';
-import { ModalIndividualEdit } from '../../../components/layout/Modal/ModalndividualEdit';
-import { ModalEntityFlags } from '../../../components/layout/Modal/ModalEntityFlags/ModalEntityFlags';
-import { ModalConfirmDelete } from '../../../components/layout/Modal/ModalConfirmDelete';
+import { ModalIndividualEdit } from '$components/layout/Modal/ModalndividualEdit';
+import { ModalEntityFlags } from '$components/layout/Modal/ModalEntityFlags/ModalEntityFlags';
+import { ModalConfirmDelete } from '$components/layout/Modal/ModalConfirmDelete';
 import type { Individual, IndividualWithFlags } from '$types/individual';
-import { ModalLinks } from '../../../components/layout/Modal/ModalLinks/ModalLinks';
-import { List } from '../../../components/lists/List/List';
+import { ModalLinks } from '$components/layout/Modal/ModalLinks/ModalLinks';
+import { List } from '$components/lists/List/List';
 
 export const ViewIndividuals: React.FC = () => {
     const [individuals, setIndividuals] = useState<IndividualWithFlags[]>([]);

@@ -3,7 +3,8 @@ import {
     selectForLogin,
     insertUser,
     updateUser,
-    selectAll
+    selectAll,
+    deleteUser
 } from '$queries/userQueries';
 import { hash, verify } from 'argon2';
 import type { RowDataPacket } from 'mysql2';
@@ -45,5 +46,9 @@ export class UserModel extends Model {
     async update(userId: number, payload: { username?: string; password?: string }) {
         if (payload.password) payload.password = await hash(payload.password);
         return await this.query(updateUser({ userId, ...payload }));
+    }
+
+    async delete(userId: number) {
+        await this.query(deleteUser(userId));
     }
 }

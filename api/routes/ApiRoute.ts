@@ -18,10 +18,9 @@ export const routes: {
 
 export const imageValidator = (optional?: boolean) => ({
     type: 'custom',
-    fileType: 'image',
-    check: (value, errors, schema) => {
+    optional,
+    check: (value, errors) => {
         if (
-            (!value && !optional) ||
             !value?.filepath ||
             !value?.size ||
             !value.mimetype ||
@@ -29,7 +28,7 @@ export const imageValidator = (optional?: boolean) => ({
         )
             errors.push({
                 type: 'notImage',
-                expected: schema.fileType,
+                expected: 'image',
                 actual: typeof value
             });
 

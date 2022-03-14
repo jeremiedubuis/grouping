@@ -36,7 +36,7 @@ export const apiFetch = (url: string, options: any = {}) => {
         body
     }).then(async (r) => {
         if (r.status > 299) {
-            throw new Error(await r.text());
+            throw await r.json();
         }
         return r.status !== 204 ? await r.json() : null;
     });

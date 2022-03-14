@@ -1,21 +1,21 @@
-import styles from './ViewHome.module.css';
+import styles from './Network.module.css';
 import React, { useEffect, useRef, useState } from 'react';
-import { asyncLinksFetch } from '../../../async/asyncLinks';
-import { asyncGroupsFetch } from '../../../async/asyncGroups';
-import { asyncIndividualsFetch } from '../../../async/asyncIndividuals';
+import { asyncLinksFetch } from '../../async/asyncLinks';
+import { asyncGroupsFetch } from '../../async/asyncGroups';
+import { asyncIndividualsFetch } from '../../async/asyncIndividuals';
 import { GroupWithFlags } from '$types/group';
 import { IndividualWithFlags } from '$types/individual';
 import { BaseLink } from '$types/linkTypes';
 import { DataSet } from 'vis-data';
-import { Network } from 'vis-network';
+import { Network as VisNetwork } from 'vis-network';
 import type { Edge, Node } from 'vis';
 
-export const ViewHome = () => {
+export const Network = () => {
     const [links, setLinks] = useState<BaseLink[]>([]);
     const [groups, setGroups] = useState<GroupWithFlags[]>([]);
     const [individuals, setIndividuals] = useState<IndividualWithFlags[]>([]);
     const ref = useRef<HTMLDivElement>(null);
-    const network = useRef<Network>();
+    const network = useRef<VisNetwork>();
     useEffect(() => {
         asyncLinksFetch().then(setLinks);
         asyncGroupsFetch().then(setGroups);
@@ -59,7 +59,7 @@ export const ViewHome = () => {
                     color: l.type === 'past' ? 'red' : 'black'
                 })) as Edge[]
             );
-            network.current = new Network(
+            network.current = new VisNetwork(
                 ref.current,
                 { nodes, edges },
                 {
@@ -94,10 +94,8 @@ export const ViewHome = () => {
     }, [groups, links, individuals]);
 
     return (
-        <main className={styles.view}>
-            <div ref={ref} className={styles.wrapper}>
-                <canvas />
-            </div>
-        </main>
+        <div ref={ref} className={styles.wrapper}>
+            <canvas />
+        </div>
     );
 };

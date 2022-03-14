@@ -137,7 +137,6 @@ export class FormStore {
         }, {} as FormValues);
 
         Object.keys(grouped).forEach((name) => {
-            console.log(grouped[name].map((f) => f.getValue()));
             values = {
                 ...values,
                 ...this.handleSameNameFieldValues(
@@ -181,7 +180,6 @@ export class FormStore {
 
     disableFieldsIfFormInvalid(errors?: [string, (string | FieldError)[]][]) {
         if (this.fieldsToDisable.length) {
-            console.log(this.fieldsToDisable);
             clearTimeout(this.disableTimeout);
             if (!this.disableDebounce) {
                 this.disableDebounce = true;

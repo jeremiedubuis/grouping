@@ -79,4 +79,8 @@ export class UserHandler extends Handler {
         if (!user) return;
         return sign(user);
     }
+
+    async delete(req: Request) {
+        await new UserModel().delete(parseInt(req.params.id));
+    }
 }
