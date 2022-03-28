@@ -23,10 +23,7 @@ export const ModalIndividualEdit: React.FC<ModalIndividualEditProps> = ({
             <FormIndividual
                 idSuffix="-edit"
                 submitText={'Editer'}
-                data={{
-                    firstname: individual.firstname,
-                    lastname: individual.lastname
-                }}
+                data={individual}
                 onSubmit={(e: any, data: any) => {
                     e.preventDefault();
                     data = omit((k) => typeof k === 'undefined')(data);
