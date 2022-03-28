@@ -93,6 +93,7 @@ export const ModularFormField: React.FC<ModularFormFieldProps> = ({
     };
 
     const Component = registeredTypes[type].Component;
+    const extraClass = registeredTypes[type].extraClass;
 
     return (
         <div
@@ -102,7 +103,8 @@ export const ModularFormField: React.FC<ModularFormFieldProps> = ({
                 `is-${type}`,
                 isFocused && 'is-focused',
                 (errorProp || errors.length > 0) && 'has-error',
-                validation && success && 'has-success'
+                validation && success && 'has-success',
+                extraClass
             )}
             {...wrapperProps}
         >

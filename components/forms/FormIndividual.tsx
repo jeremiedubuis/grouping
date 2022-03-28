@@ -51,7 +51,7 @@ export const FormIndividual: React.FC<FormIndividualProps> = ({
                 name="defaultNodeColor"
                 label="Couleur par défaut du noeud"
                 value={data.defaultNodeColor}
-                type={ModularFieldType.Color}
+                type={'ColorPicker'}
             />
             <ModularFormField
                 formId={id}

@@ -1,10 +1,11 @@
 import type React from 'react';
-import type { Ref, RefObject } from 'react';
+import type { RefObject } from 'react';
 import { FieldError, ModularFieldType } from './enums';
 import { RegularInput } from './fieldComponents/RegularInput';
 import { Textarea } from './fieldComponents/Textarea';
 import { Select } from './fieldComponents/Select';
 import styles from '../../css/ModularForms.module.css';
+import { FieldComponentProps } from '$components/react-modulr-forms/types';
 
 export const config = {
     displayMultipleErrors: true,
@@ -75,9 +76,12 @@ export const registeredTypes = {
 export const registerType = (
     fieldType: string,
     componentOptions: {
-        Component: React.Component;
-        getValue: (ref: Ref<any>) => any;
+        Component:
+            | React.Component<React.HTMLProps<any> & FieldComponentProps>
+            | React.FC<React.HTMLProps<any> & FieldComponentProps>;
+        getValue: (ref: RefObject<any>) => any;
         labelBefore?: boolean;
+        extraClass?: string;
     }
 ) => {
     if (typeof componentOptions.labelBefore === 'undefined') componentOptions.labelBefore = true;

@@ -31,7 +31,7 @@ export class FormStore {
 
     registerField(
         id: string,
-        type: ModularFieldType,
+        type: ModularFieldType | string,
         name: string,
         componentRef,
         getValue: (ref: RefObject<any>) => any,
@@ -93,7 +93,11 @@ export class FormStore {
         let value;
         let validation;
 
-        if (![ModularFieldType.Checkbox, ModularFieldType.Radio].includes(field.type)) {
+        if (
+            ![ModularFieldType.Checkbox, ModularFieldType.Radio].includes(
+                field.type as ModularFieldType
+            )
+        ) {
             validation = field.validation;
             value = field.getValue();
         } else {

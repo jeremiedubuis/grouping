@@ -11,7 +11,7 @@ interface IFormFieldOptions {
     name: string;
     componentRef: RefObject<any>;
     getValue: (ref: RefObject<any>) => any;
-    type: ModularFieldType;
+    type: ModularFieldType | string;
     validation?: ValidationType;
     setSuccess?: Function;
     setErrors?: Function;
@@ -21,7 +21,7 @@ interface IFormFieldOptions {
 export class FormField implements IFormFieldOptions {
     public id: string;
     public name: string;
-    public type: ModularFieldType;
+    public type: ModularFieldType | string;
     validation?: ValidationType;
     componentRef: RefObject<any>;
     _setSuccess?: Function;
