@@ -30,7 +30,7 @@ export const deleteIndividual = (individualId: number) =>
 
 const selectIndividualsQuery = `
     SELECT 
-           i.id, i.firstname, i.lastname, i.default_node_value AS defaultNodeValue, i.default_node_color AS defaultNodeColor,  
+           i.id, i.firstname, i.lastname, i.description, i.default_node_value AS defaultNodeValue, i.default_node_color AS defaultNodeColor,  
            a.path AS picture, a.thumbnail,
            f.id AS flagId, f.name AS flagName, ifv.id as entityFlagId, fv.value AS flagValue, fv.id As flagValueId
     FROM individuals i

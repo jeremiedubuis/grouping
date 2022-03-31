@@ -11,13 +11,14 @@ export class MigrationHandler extends Handler {
         if (req.body.migrationPath.includes('..')) throw new ApiError('Path includes dots', 401);
         const migrationsPath = path.join(__dirname, '../migrations').replace(/\\/g, '/');
         const filePath = path.join(migrationsPath, req.body.migrationPath);
-        const sqlContent: string = await new Promise((resolve) => {
+        const sqlContent: string[] = await new Promise((resolve) => {
             fs.readFile(filePath, 'utf-8', (_err, content) => {
                 resolve(content);
             });
-        });
+        }).then((sql: unknown) => (sql as string).split('====='));
         try {
-            await new Model().query(sqlContent);
+            const model = new Model();
+            await Promise.all(sqlContent.map((sql) => model.query(sql)));
             return this.success(sqlContent, 200);
         } catch (e: any) {
             throw new ApiError({

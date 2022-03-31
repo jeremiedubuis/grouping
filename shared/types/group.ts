@@ -4,6 +4,7 @@ import { FlagValues } from '$types/flag';
 export type BaseGroup = {
     name: string;
     type: string;
+    description?: string;
     picture?: string;
     thumbnail?: string;
     defaultNodeValue?: number;

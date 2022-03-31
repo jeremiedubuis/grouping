@@ -6,3 +6,8 @@ const assetInsertQuery = `
     VALUES (:filePath, :thumbnail, :mimeType)`;
 
 export const assetInsert = (payload: AssetPayload) => sqlValues(payload, assetInsertQuery);
+
+const assetDeleteQuery = `
+    DELETE FROM assets WHERE id = :id`;
+
+export const assetDelete = (id: number) => sqlValues({ id }, assetDeleteQuery);

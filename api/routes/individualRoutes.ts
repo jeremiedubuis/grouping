@@ -22,6 +22,7 @@ export const createRoutes = (app: any) => {
             body: {
                 firstname: 'string',
                 lastname: 'string',
+                description: 'string|optional',
                 defaultNodeValue: 'number|optional|convert',
                 defaultNodeColor: 'string|optional',
                 picture: imageValidator(true)
@@ -41,6 +42,7 @@ export const createRoutes = (app: any) => {
             body: {
                 firstname: 'string|optional',
                 lastname: 'string|optional',
+                description: 'string|optional',
                 defaultNodeValue: 'number|optional|convert',
                 defaultNodeColor: 'string|optional',
                 picture: imageValidator(true)

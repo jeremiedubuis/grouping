@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.36, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.62, for Win64 (AMD64)
 --
 -- Host: localhost    Database: grouping
 -- ------------------------------------------------------
@@ -28,17 +28,35 @@ CREATE TABLE `assets` (
   `thumbnail` varchar(255) DEFAULT NULL,
   `mime_type` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `assets`
+-- Table structure for table `blocks`
 --
 
-LOCK TABLES `assets` WRITE;
-/*!40000 ALTER TABLE `assets` DISABLE KEYS */;
-/*!40000 ALTER TABLE `assets` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `blocks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `blocks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `subtitle` varchar(255) DEFAULT NULL,
+  `text` text,
+  `link_href` varchar(255) DEFAULT NULL,
+  `link_text` varchar(100) DEFAULT NULL,
+  `page_id` int(11) DEFAULT NULL,
+  `block_id` int(11) DEFAULT NULL,
+  `asset_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `blocks_FK` (`page_id`),
+  KEY `blocks_FK_1` (`block_id`),
+  KEY `blocks_FK_2` (`asset_id`),
+  CONSTRAINT `blocks_FK` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `blocks_FK_1` FOREIGN KEY (`block_id`) REFERENCES `blocks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `blocks_FK_2` FOREIGN KEY (`asset_id`) REFERENCES `assets` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `entity_flag_values`
@@ -66,15 +84,6 @@ CREATE TABLE `entity_flag_values` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `entity_flag_values`
---
-
-LOCK TABLES `entity_flag_values` WRITE;
-/*!40000 ALTER TABLE `entity_flag_values` DISABLE KEYS */;
-/*!40000 ALTER TABLE `entity_flag_values` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `flag_values`
 --
 
@@ -92,15 +101,6 @@ CREATE TABLE `flag_values` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `flag_values`
---
-
-LOCK TABLES `flag_values` WRITE;
-/*!40000 ALTER TABLE `flag_values` DISABLE KEYS */;
-/*!40000 ALTER TABLE `flag_values` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `flags`
 --
 
@@ -115,15 +115,6 @@ CREATE TABLE `flags` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `flags`
---
-
-LOCK TABLES `flags` WRITE;
-/*!40000 ALTER TABLE `flags` DISABLE KEYS */;
-/*!40000 ALTER TABLE `flags` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `group_types`
 --
 
@@ -134,17 +125,8 @@ CREATE TABLE `group_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `group_types`
---
-
-LOCK TABLES `group_types` WRITE;
-/*!40000 ALTER TABLE `group_types` DISABLE KEYS */;
-/*!40000 ALTER TABLE `group_types` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `groups`
@@ -169,17 +151,8 @@ CREATE TABLE `groups` (
   KEY `groups_FK_1` (`asset_id`),
   CONSTRAINT `groups_FK` FOREIGN KEY (`group_type_id`) REFERENCES `group_types` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `groups_FK_1` FOREIGN KEY (`asset_id`) REFERENCES `assets` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `groups`
---
-
-LOCK TABLES `groups` WRITE;
-/*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `groups` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `individuals`
@@ -194,6 +167,7 @@ CREATE TABLE `individuals` (
   `firstname_slug` varchar(255) DEFAULT NULL,
   `lastname` varchar(255) NOT NULL,
   `lastname_slug` varchar(255) NOT NULL,
+  `description` text,
   `default_node_value` int(11) DEFAULT NULL,
   `default_node_color` varchar(25) DEFAULT NULL,
   `asset_id` int(11) DEFAULT NULL,
@@ -201,17 +175,8 @@ CREATE TABLE `individuals` (
   UNIQUE KEY `individuals_un` (`firstname`,`lastname`),
   KEY `individuals_FK` (`asset_id`),
   CONSTRAINT `individuals_FK` FOREIGN KEY (`asset_id`) REFERENCES `assets` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `individuals`
---
-
-LOCK TABLES `individuals` WRITE;
-/*!40000 ALTER TABLE `individuals` DISABLE KEYS */;
-/*!40000 ALTER TABLE `individuals` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `links`
@@ -242,13 +207,62 @@ CREATE TABLE `links` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `links`
+-- Table structure for table `map_entries`
 --
 
-LOCK TABLES `links` WRITE;
-/*!40000 ALTER TABLE `links` DISABLE KEYS */;
-/*!40000 ALTER TABLE `links` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `map_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `map_entries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `map_id` int(11) NOT NULL,
+  `individual_id` int(11) DEFAULT NULL,
+  `group_id` int(11) DEFAULT NULL,
+  `node_value` int(11) DEFAULT NULL,
+  `node_color` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `map_entries_un` (`map_id`,`individual_id`),
+  UNIQUE KEY `map_entries_un2` (`map_id`,`group_id`),
+  KEY `map_entries_FK_1` (`group_id`),
+  KEY `map_entries_FK_2` (`individual_id`),
+  CONSTRAINT `map_entries_FK` FOREIGN KEY (`map_id`) REFERENCES `maps` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `map_entries_FK_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `map_entries_FK_2` FOREIGN KEY (`individual_id`) REFERENCES `individuals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `maps`
+--
+
+DROP TABLE IF EXISTS `maps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `maps` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pages`
+--
+
+DROP TABLE IF EXISTS `pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `path` varchar(255) NOT NULL,
+  `template` varchar(100) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `users`
@@ -264,7 +278,6 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Dumping data for table `users`
 --
@@ -284,4 +297,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-03 22:45:38
+-- Dump completed on 2022-04-01  0:39:16

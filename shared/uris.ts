@@ -50,9 +50,29 @@ export const linkRoutes = {
     specific: `${prefix}/link/:linkId`
 };
 
+export const mapRoutes = {
+    single: `${prefix}/map`,
+    specific: `${prefix}/map/:id`
+};
+
+export const mapEntryRoutes = {
+    single: `${prefix}/map-entry`,
+    specific: `${prefix}/map-entry/:id`
+};
+
 export const migrationRoutes = {
     single: `${prefix}/migration`,
     multiple: `${prefix}/migrations`
+};
+
+export const pageRoutes = {
+    single: `${prefix}/page`,
+    specific: `${prefix}/page/:id`
+};
+
+export const pageBlockRoute = {
+    single: `${prefix}/page-block`,
+    specific: `${prefix}/page-block/:id`
 };
 
 export const pathWithParams = (

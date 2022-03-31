@@ -3,6 +3,7 @@ import type { File } from 'formidable';
 export type BaseIndividual = {
     firstname: string;
     lastname: string;
+    description?: string;
     picture?: string;
     thumbnail?: string;
     defaultNodeValue?: number;

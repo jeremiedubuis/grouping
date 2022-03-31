@@ -1,5 +1,5 @@
 import { Model } from '$models/Model';
-import { assetInsert } from '$queries/assetQueries';
+import { assetDelete, assetInsert } from '$queries/assetQueries';
 import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
@@ -57,5 +57,11 @@ export class AssetModel extends Model {
             assetInsert({ filePath, mimeType: file.mimetype, thumbnail })
         );
         return { id: insertId };
+    }
+
+    async deleteAsset(id: number, filePath: string, thumbnail?: string) {
+        await fsUnlink(path.join(process.cwd(), filePath));
+        if (thumbnail) await fsUnlink(path.join(process.cwd(), thumbnail));
+        await this.query(assetDelete(id));
     }
 }
