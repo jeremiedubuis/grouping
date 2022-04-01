@@ -28,9 +28,11 @@ const groupLinksSelectQuery = `
 export const groupLinksSelect = (groupId: number) => sqlValues({ groupId }, groupLinksSelectQuery);
 
 const individualLinksSelectQuery = `
-    SELECT  l.id, l.type,  i2.id AS individualId, i2.firstname, i2.lastname,
-            i2_a.path As individualPicture,
-            g2.id AS groupId, g2.name AS groupName, gt2.type AS groupType, g2_a.path AS groupPicture
+    SELECT  l.id, l.type,  i2.id AS individualId, i2.firstname, i2.lastname, i2.default_node_color AS individualDefaultNodeColor,
+        i2.default_node_value AS individualDefaultNodeValue,
+        i2_a.path AS individualPicture,
+        g2.id AS groupId, g2.name AS groupName, gt2.type AS groupType, g2_a.path AS groupPicture, 
+        g2.default_node_color As groupDefaultNodeColor,g2.default_node_value As groupDefaultNodeValue
     FROM links l
              LEFT JOIN groups g2 ON (l.group_id = g2.id OR l.group2_id = g2.id)
              LEFT JOIN assets g2_a ON g2.asset_id = g2_a.id

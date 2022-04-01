@@ -53,4 +53,18 @@ export const createRoutes = (app: any) => {
             id: 'string'
         }
     });
+    new ApiRoute(
+        app,
+        mapRoutes.fillFromIndividualLinks,
+        Method.POST,
+        MapHandler.handle('mapFillFromIndividualLinks'),
+        {
+            params: {
+                id: 'string'
+            },
+            body: {
+                individualId: 'number'
+            }
+        }
+    );
 };

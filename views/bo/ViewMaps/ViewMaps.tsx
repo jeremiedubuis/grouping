@@ -1,12 +1,15 @@
 import styles from './ViewMaps.module.css';
 import React, { useEffect, useState } from 'react';
-import { asyncMapCreate, asyncMapsFetch } from '../../../async/asyncMaps';
+import { asyncMapCreate, asyncMapDelete, asyncMapsFetch } from '../../../async/asyncMaps';
 import type { Map } from '$types/map';
 import { FormMap } from '$components/forms/FormMap';
-import Link from 'next/link';
+import { List } from '$components/lists/List/List';
+import { ModalConfirmDelete } from '$components/layout/Modal/ModalConfirmDelete';
+import { FiTrash } from 'react-icons/fi';
 
 export const ViewMaps = () => {
     const [maps, setMaps] = useState<Map[]>([]);
+    const [deleteCallback, setDeleteCallback] = useState<Function | null>(null);
 
     useEffect(() => {
         asyncMapsFetch().then(setMaps);
@@ -26,16 +29,31 @@ export const ViewMaps = () => {
                 submitText="Créer une map"
             />
             <h2>Cartes</h2>
-            {maps.length > 0 && (
-                <ul>
-                    {maps.map((m) => (
-                        <li key={m.id}>
-                            <Link href={`/bo/map/${m.id}`}>
-                                <a>{m.name}</a>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
+
+            <List
+                items={maps.map((m) => ({
+                    id: m.id,
+                    name: m.name,
+                    initials: m.name[0],
+                    buttons: [
+                        {
+                            icon: <FiTrash />,
+                            onClick: () =>
+                                setDeleteCallback(() => () => {
+                                    asyncMapDelete(m.id).then(() =>
+                                        setMaps(maps.filter(({ id }) => id !== m.id))
+                                    );
+                                })
+                        }
+                    ]
+                }))}
+            />
+
+            {deleteCallback && (
+                <ModalConfirmDelete
+                    close={() => setDeleteCallback(null)}
+                    onSubmit={deleteCallback}
+                />
             )}
         </main>
     );

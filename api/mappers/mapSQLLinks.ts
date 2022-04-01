@@ -7,7 +7,9 @@ export const mapSQLLinks = (r) =>
                     id: curr.groupId,
                     name: curr.groupName,
                     type: curr.groupType,
-                    picture: curr.groupPicture
+                    picture: curr.groupPicture,
+                    defaultNodeValue: curr.groupDefaultNodeValue,
+                    defaultNodeColor: curr.groupDefaultNodeColor
                 });
             }
             if (curr.individualId)
@@ -16,7 +18,9 @@ export const mapSQLLinks = (r) =>
                     id: curr.individualId,
                     firstname: curr.firstname,
                     lastname: curr.lastname,
-                    picture: curr.individualPicture
+                    picture: curr.individualPicture,
+                    defaultNodeValue: curr.individualDefaultNodeValue,
+                    defaultNodeColor: curr.individualDefaultNodeColor
                 });
             return acc;
         },

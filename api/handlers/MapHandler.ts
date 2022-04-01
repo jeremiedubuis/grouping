@@ -2,13 +2,60 @@ import { Handler } from '$handlers/Handler';
 import { Request } from '$types/server';
 import { MapModel } from '$models/MapModel';
 import { MapEntryModel } from '$models/MapEntryModel';
+import { LinkModel } from '$models/LinkModel';
+import { IndividualModel } from '$models/IndividualModel';
+import { ApiError } from '../ApiError';
 
 export class MapHandler extends Handler {
     async selectMaps() {
         return this.success(await new MapModel().selectMaps(), 200);
     }
+
     async selectMap(req: Request) {
         return this.success(await new MapModel().selectMap(parseInt(req.params.id)), 200);
+    }
+
+    async mapFillFromIndividualLinks(req: Request) {
+        const mapId = parseInt(req.params.id);
+        const individual = await new IndividualModel().selectFromId(req.body.individualId);
+        if (!individual) throw new ApiError('NOT_FOUND', 500);
+        const { individuals, groups } = await new LinkModel().selectIndividualLink(
+            req.body.individualId
+        );
+        const mapEntryModel = new MapEntryModel();
+        try {
+            await mapEntryModel.insertMapEntry({
+                mapId,
+                individualId: req.body.individualId,
+                nodeColor: individual.defaultNodeColor,
+                nodeValue: individual.defaultNodeValue
+            });
+        } catch (e) {}
+        await Promise.all(
+            individuals.map(async ({ id, defaultNodeColor, defaultNodeValue }) => {
+                try {
+                    await mapEntryModel.insertMapEntry({
+                        mapId,
+                        individualId: id,
+                        nodeColor: defaultNodeColor,
+                        nodeValue: defaultNodeValue
+                    });
+                } catch (e) {}
+            })
+        );
+        await Promise.all(
+            groups.map(async ({ id, defaultNodeColor, defaultNodeValue }) => {
+                try {
+                    await mapEntryModel.insertMapEntry({
+                        mapId,
+                        groupId: id,
+                        nodeColor: defaultNodeColor,
+                        nodeValue: defaultNodeValue
+                    });
+                } catch (e) {}
+            })
+        );
+        return this.success(await new MapModel().selectMap(mapId), 200);
     }
 
     async createMap(req: Request) {

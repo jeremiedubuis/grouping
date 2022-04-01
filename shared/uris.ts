@@ -53,7 +53,9 @@ export const linkRoutes = {
 export const mapRoutes = {
     single: `${prefix}/map`,
     multiple: `${prefix}/maps`,
-    specific: `${prefix}/map/:id`
+    specific: `${prefix}/map/:id`,
+    fillFromIndividualLinks: `${prefix}/map/:id/fill-from-individual`,
+    fillFromGroupLinks: `${prefix}/map/:id/fill-from-group`
 };
 
 export const mapEntryRoutes = {

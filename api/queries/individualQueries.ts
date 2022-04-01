@@ -46,3 +46,9 @@ const selectIndividualQuery = `${selectIndividualsQuery}
 
 export const selectIndividual = (firstnameSlug: string, lastnameSlug: string) =>
     sqlValues({ firstnameSlug, lastnameSlug }, selectIndividualQuery);
+
+const selectIndividualFromIdQuery = `${selectIndividualsQuery}
+    WHERE i.id = :id`;
+
+export const selectIndividualFromId = (id: number) =>
+    sqlValues({ id }, selectIndividualFromIdQuery);

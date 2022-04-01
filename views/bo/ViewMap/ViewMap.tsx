@@ -4,11 +4,17 @@ import { asyncIndividualsFetch } from '../../../async/asyncIndividuals';
 import { Individual } from '$types/individual';
 import { Group } from '$types/group';
 import { asyncGroupsFetch } from '../../../async/asyncGroups';
-import { asyncMapEntryCreate, asyncMapEntryDelete, asyncMapFetch } from '../../../async/asyncMaps';
+import {
+    asyncMapEntryCreate,
+    asyncMapEntryDelete,
+    asyncMapFetch,
+    asyncMapFillFromIndividualId
+} from '../../../async/asyncMaps';
 import { FormMapEntry } from '$components/forms/FormMapEntry';
 import { List } from '$components/lists/List/List';
 import { FiTrash } from 'react-icons/fi';
 import { ModalConfirmDelete } from '$components/layout/Modal/ModalConfirmDelete';
+import { FormMapFillFromEntity } from '$components/forms/FormMapFillFromEntity';
 type ViewMapProps = {
     id: number;
 };
@@ -31,25 +37,40 @@ export const ViewMap: React.FC<ViewMapProps> = ({ id }) => {
         <main>
             <h1>Carte: {map.name}</h1>
             {individuals && groups && (
-                <FormMapEntry
-                    onSubmit={(e, data) => {
-                        e.preventDefault();
-                        asyncMapEntryCreate(data).then(({ id }) => {
-                            const entityKey = data.groupId ? 'groups' : 'individuals';
-                            const entity = data.groupId
-                                ? groups.find((g) => g.id === data.groupId)
-                                : individuals.find((i) => i.id === data.individualId);
-                            setMap({
-                                ...map,
-                                [entityKey]: [...map[entityKey], { entry_id: id, ...entity }]
+                <>
+                    <h2>Ajouter une entrée</h2>
+                    <FormMapEntry
+                        onSubmit={(e, data) => {
+                            e.preventDefault();
+                            asyncMapEntryCreate(data).then(({ id }) => {
+                                const entityKey = data.groupId ? 'groups' : 'individuals';
+                                const entity = data.groupId
+                                    ? groups.find((g) => g.id === data.groupId)
+                                    : individuals.find((i) => i.id === data.individualId);
+                                setMap({
+                                    ...map,
+                                    [entityKey]: [...map[entityKey], { entry_id: id, ...entity }]
+                                });
                             });
-                        });
-                    }}
-                    submitText={'Ajouter'}
-                    mapId={id}
-                    groups={groups}
-                    individuals={individuals}
-                />
+                        }}
+                        submitText={'Ajouter'}
+                        mapId={id}
+                        groups={groups}
+                        individuals={individuals}
+                    />
+
+                    <h2>Auto-remplissage</h2>
+                    <FormMapFillFromEntity
+                        onSubmit={(e, { individualId }) => {
+                            e.preventDefault();
+                            asyncMapFillFromIndividualId(id, individualId).then(setMap);
+                        }}
+                        submitText={'Remplir'}
+                        mapId={id}
+                        groups={groups}
+                        individuals={individuals}
+                    />
+                </>
             )}
 
             <h2>Individus</h2>
