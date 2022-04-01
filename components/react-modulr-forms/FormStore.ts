@@ -1,5 +1,5 @@
 import type { ValidationType } from './types';
-import { FormValues, SameNameFieldValuesHandler } from './types';
+import { CoerceType, FormValues, SameNameFieldValuesHandler } from './types';
 import { FieldError, ModularFieldType } from './enums';
 import { FormField } from './FormField';
 import { config } from './config';
@@ -38,7 +38,8 @@ export class FormStore {
         validation: ValidationType = {},
         setSuccess: Function,
         setErrors: Function,
-        disableOnInvalidForm?: boolean
+        disableOnInvalidForm?: boolean,
+        coerceType?: CoerceType
     ) {
         const ff = new FormField({
             id,
@@ -49,7 +50,8 @@ export class FormStore {
             validation,
             setSuccess,
             setErrors,
-            disableOnInvalidForm
+            disableOnInvalidForm,
+            coerceType
         });
         this.fields.push(ff);
         if (disableOnInvalidForm) {

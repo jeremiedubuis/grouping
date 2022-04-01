@@ -55,6 +55,7 @@ export const registeredTypes = {
                 : ref.current.files[0];
         }
     },
+    [ModularFieldType.Hidden]: regularInputType,
     [ModularFieldType.Number]: regularInputType,
     [ModularFieldType.Password]: regularInputType,
     [ModularFieldType.Radio]: { ...regularInputType, labelBefore: false },

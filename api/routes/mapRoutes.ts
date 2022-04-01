@@ -4,6 +4,12 @@ import { Method } from '$types/server';
 import { MapHandler } from '$handlers/MapHandler';
 
 export const createRoutes = (app: any) => {
+    new ApiRoute(app, mapRoutes.multiple, Method.GET, MapHandler.handle('selectMaps'));
+    new ApiRoute(app, mapRoutes.specific, Method.GET, MapHandler.handle('selectMap'), {
+        params: {
+            id: 'string'
+        }
+    });
     new ApiRoute(app, mapRoutes.single, Method.POST, MapHandler.handle('createMap'), {
         body: {
             name: 'string',
@@ -27,7 +33,7 @@ export const createRoutes = (app: any) => {
     new ApiRoute(app, mapEntryRoutes.single, Method.POST, MapHandler.handle('createMapEntry'), {
         body: {
             mapId: 'number',
-            groupId: 'number|optiona',
+            groupId: 'number|optional',
             individualId: 'number|optional',
             nodeColor: 'string|optional',
             nodeValue: 'number|optional'

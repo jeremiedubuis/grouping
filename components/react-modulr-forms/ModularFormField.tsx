@@ -26,6 +26,7 @@ export const ModularFormField: React.FC<ModularFormFieldProps> = ({
     disabled,
     errorMessages,
     value: _value = '',
+    coerceType,
     ...intrinsic
 }) => {
     const [isFocused, setIsFocused] = useState(false);
@@ -53,7 +54,8 @@ export const ModularFormField: React.FC<ModularFormFieldProps> = ({
                 validation,
                 setSuccess,
                 setErrors,
-                disableOnInvalidForm
+                disableOnInvalidForm,
+                coerceType
             );
 
             return () => form.unregisterField(id);

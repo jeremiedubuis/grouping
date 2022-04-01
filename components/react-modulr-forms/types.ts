@@ -46,6 +46,8 @@ export type ModularFormProps = {
     [attribute: string]: any;
 };
 
+export type CoerceType = 'int' | 'float' | 'string';
+
 export type ModularFormFieldProps = {
     className?: string;
     disableOnInvalidForm?: boolean;
@@ -61,6 +63,7 @@ export type ModularFormFieldProps = {
     onFocus?: (e: React.SyntheticEvent) => void;
     validation?: ValidationType;
     errorMessages?: Partial<ErrorMessages>;
+    coerceType?: CoerceType;
     [intrinsicAttribute: string]: any;
 };
 

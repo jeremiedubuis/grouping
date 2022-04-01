@@ -52,6 +52,7 @@ export const linkRoutes = {
 
 export const mapRoutes = {
     single: `${prefix}/map`,
+    multiple: `${prefix}/maps`,
     specific: `${prefix}/map/:id`
 };
 

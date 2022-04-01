@@ -1,0 +1,12 @@
+.view {
+
+}
+
+.form > div {
+     display: inline-block;
+    vertical-align: bottom;
+ }
+
+.form > div + div {
+    margin-left: 15px;
+}

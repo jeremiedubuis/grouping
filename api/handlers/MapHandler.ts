@@ -4,6 +4,13 @@ import { MapModel } from '$models/MapModel';
 import { MapEntryModel } from '$models/MapEntryModel';
 
 export class MapHandler extends Handler {
+    async selectMaps() {
+        return this.success(await new MapModel().selectMaps(), 200);
+    }
+    async selectMap(req: Request) {
+        return this.success(await new MapModel().selectMap(parseInt(req.params.id)), 200);
+    }
+
     async createMap(req: Request) {
         const id = await new MapModel().insertMap(req.body);
         return this.success({ id }, 201);

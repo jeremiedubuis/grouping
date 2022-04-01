@@ -1,5 +1,5 @@
 import { FieldError, ModularFieldType } from './enums';
-import { ElementType, ValidationType } from './types';
+import { CoerceType, ElementType, ValidationType } from './types';
 import { config } from './config';
 import type { RefObject } from 'react';
 
@@ -16,6 +16,7 @@ interface IFormFieldOptions {
     setSuccess?: Function;
     setErrors?: Function;
     disableOnInvalidForm?: boolean;
+    coerceType?: CoerceType;
 }
 
 export class FormField implements IFormFieldOptions {
@@ -28,6 +29,7 @@ export class FormField implements IFormFieldOptions {
     _setErrors?: Function;
     _getValue: Function;
     disableOnInvalidForm?: boolean;
+    coerceType?: CoerceType;
 
     constructor(payload: IFormFieldOptions) {
         this.id = payload.id;
@@ -39,6 +41,7 @@ export class FormField implements IFormFieldOptions {
         this._setErrors = payload.setErrors;
         this._getValue = payload.getValue;
         this.disableOnInvalidForm = payload.disableOnInvalidForm;
+        this.coerceType = payload.coerceType;
     }
 
     getErrors() {
@@ -47,7 +50,8 @@ export class FormField implements IFormFieldOptions {
     }
 
     getValue() {
-        return this._getValue(this.componentRef);
+        const v = this._getValue(this.componentRef);
+        return this.coerceType ? this.coerce(v) : v;
     }
 
     setSuccess() {
@@ -115,5 +119,16 @@ export class FormField implements IFormFieldOptions {
 
     setDisabled(disabled: boolean) {
         (document.getElementById(this.id) as ElementType).disabled = disabled;
+    }
+
+    coerce(value: any) {
+        switch (this.coerceType) {
+            case 'int':
+                return parseInt(value);
+            case 'float':
+                return parseFloat(value);
+            case 'string':
+                return value?.toString() || value;
+        }
     }
 }
