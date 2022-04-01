@@ -35,6 +35,7 @@ export const ViewMaps = () => {
                     id: m.id,
                     name: m.name,
                     initials: m.name[0],
+                    link: `/bo/map/${m.id}`,
                     buttons: [
                         {
                             icon: <FiTrash />,
