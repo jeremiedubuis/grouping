@@ -34,7 +34,6 @@ export const apiFetch = (url: string, options: any = {}) => {
         url = 'http://localhost:' + (process.env.PORT || 3000) + url;
         headers['origin'] = process.env.HOST;
     }
-    console.log(url);
 
     return fetch(url, {
         ...options,

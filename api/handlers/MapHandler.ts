@@ -6,6 +6,7 @@ import { LinkModel } from '$models/LinkModel';
 import { IndividualModel } from '$models/IndividualModel';
 import { ApiError } from '../ApiError';
 import { DetailedMap } from '$types/map';
+import { GroupModel } from '$models/GroupModel';
 
 export class MapHandler extends Handler {
     async selectMaps() {
@@ -52,6 +53,47 @@ export class MapHandler extends Handler {
                 individualId: req.body.individualId,
                 nodeColor: individual.defaultNodeColor,
                 nodeValue: individual.defaultNodeValue
+            });
+        } catch (e) {}
+        await Promise.all(
+            individuals.map(async ({ id, defaultNodeColor, defaultNodeValue }) => {
+                try {
+                    await mapEntryModel.insertMapEntry({
+                        mapId,
+                        individualId: id,
+                        nodeColor: defaultNodeColor,
+                        nodeValue: defaultNodeValue
+                    });
+                } catch (e) {}
+            })
+        );
+        await Promise.all(
+            groups.map(async ({ id, defaultNodeColor, defaultNodeValue }) => {
+                try {
+                    await mapEntryModel.insertMapEntry({
+                        mapId,
+                        groupId: id,
+                        nodeColor: defaultNodeColor,
+                        nodeValue: defaultNodeValue
+                    });
+                } catch (e) {}
+            })
+        );
+        return this.success(await new MapModel().selectMap(mapId), 200);
+    }
+
+    async mapFillFromGrouplinks(req: Request) {
+        const mapId = parseInt(req.params.id);
+        const group = await new GroupModel().selectFromId(req.body.groupId);
+        if (!group) throw new ApiError('NOT_FOUND', 500);
+        const { individuals, groups } = await new LinkModel().selectGroupLinks(req.body.groupId);
+        const mapEntryModel = new MapEntryModel();
+        try {
+            await mapEntryModel.insertMapEntry({
+                mapId,
+                groupId: req.body.groupId,
+                nodeColor: group.defaultNodeColor,
+                nodeValue: group.defaultNodeValue
             });
         } catch (e) {}
         await Promise.all(

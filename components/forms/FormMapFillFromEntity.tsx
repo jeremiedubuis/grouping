@@ -21,7 +21,7 @@ export const FormMapFillFromEntity: React.FC<FormMapFillFromEntityProps> = ({
     groups,
     individuals
 }) => {
-    const id = 'form-map' + idSuffix;
+    const id = 'form-map-autofill' + idSuffix;
     const [type, setType] = useState('groups');
 
     return (
@@ -38,7 +38,6 @@ export const FormMapFillFromEntity: React.FC<FormMapFillFromEntityProps> = ({
             </ModularFormField>
             {type === 'individuals' ? (
                 <ModularFormField
-                    key="individualId"
                     formId={id}
                     id={'map-fill-from-entityindividual' + idSuffix}
                     name="individualId"
@@ -54,7 +53,6 @@ export const FormMapFillFromEntity: React.FC<FormMapFillFromEntityProps> = ({
                 </ModularFormField>
             ) : (
                 <ModularFormField
-                    key="groupId"
                     formId={id}
                     id={'map-fill-from-entitygroup' + idSuffix}
                     name="groupId"

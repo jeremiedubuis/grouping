@@ -8,6 +8,7 @@ import {
     asyncMapEntryCreate,
     asyncMapEntryDelete,
     asyncMapFetch,
+    asyncMapFillFromGroupId,
     asyncMapFillFromIndividualId
 } from '../../../async/asyncMaps';
 import { FormMapEntry } from '$components/forms/FormMapEntry';
@@ -32,7 +33,6 @@ export const ViewMap: React.FC<ViewMapProps> = ({ id }) => {
     }, []);
 
     if (!map) return null;
-    console.log(individuals, groups, map);
     return (
         <main>
             <h1>Carte: {map.name}</h1>
@@ -61,9 +61,11 @@ export const ViewMap: React.FC<ViewMapProps> = ({ id }) => {
 
                     <h2>Auto-remplissage</h2>
                     <FormMapFillFromEntity
-                        onSubmit={(e, { individualId }) => {
+                        onSubmit={(e, { individualId, groupId }) => {
                             e.preventDefault();
-                            asyncMapFillFromIndividualId(id, individualId).then(setMap);
+                            if (individualId)
+                                asyncMapFillFromIndividualId(id, individualId).then(setMap);
+                            else asyncMapFillFromGroupId(id, groupId).then(setMap);
                         }}
                         submitText={'Remplir'}
                         mapId={id}

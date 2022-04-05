@@ -67,4 +67,18 @@ export const createRoutes = (app: any) => {
             }
         }
     );
+    new ApiRoute(
+        app,
+        mapRoutes.fillFromGroupLinks,
+        Method.POST,
+        MapHandler.handle('mapFillFromGrouplinks'),
+        {
+            params: {
+                id: 'string'
+            },
+            body: {
+                groupId: 'number'
+            }
+        }
+    );
 };

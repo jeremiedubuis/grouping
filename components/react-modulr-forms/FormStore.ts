@@ -141,6 +141,7 @@ export class FormStore {
             if (grouped[f.name]) return;
             const fieldsWithSameName = this.fields.filter((field) => field.name === f.name);
             if (fieldsWithSameName.length > 1) {
+                console.log(fieldsWithSameName);
                 grouped[f.name] = fieldsWithSameName;
                 return;
             }
