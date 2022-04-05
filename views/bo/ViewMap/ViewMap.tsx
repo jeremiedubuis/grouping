@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import type { DetailedMap } from '$types/map';
+import type { DetailedMap, MapGroup, MapIndividual } from '$types/map';
 import { asyncIndividualsFetch } from '../../../async/asyncIndividuals';
 import { Individual } from '$types/individual';
 import { Group } from '$types/group';
@@ -85,11 +85,14 @@ export const ViewMap: React.FC<ViewMapProps> = ({ id }) => {
                             icon: <FiTrash />,
                             onClick: () =>
                                 setDeleteCallback(() => () => {
-                                    asyncMapEntryDelete(i.entry_id).then(() =>
+                                    asyncMapEntryDelete((i as MapIndividual).entry_id).then(() =>
                                         setMap({
                                             ...map,
-                                            individuals: map?.individuals.filter(
-                                                ({ entry_id }) => entry_id !== i.entry_id
+                                            individuals: (
+                                                map?.individuals as MapIndividual[]
+                                            ).filter(
+                                                ({ entry_id }) =>
+                                                    entry_id !== (i as MapIndividual).entry_id
                                             )
                                         })
                                     );
@@ -111,11 +114,12 @@ export const ViewMap: React.FC<ViewMapProps> = ({ id }) => {
                             icon: <FiTrash />,
                             onClick: () =>
                                 setDeleteCallback(() => () => {
-                                    asyncMapEntryDelete(g.entry_id).then(() =>
+                                    asyncMapEntryDelete((g as MapGroup).entry_id).then(() =>
                                         setMap({
                                             ...map,
-                                            groups: map?.groups.filter(
-                                                ({ entry_id }) => entry_id !== g.entry_id
+                                            groups: (map?.groups as MapGroup[]).filter(
+                                                ({ entry_id }) =>
+                                                    entry_id !== (g as MapGroup).entry_id
                                             )
                                         })
                                     );

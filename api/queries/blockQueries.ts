@@ -2,8 +2,8 @@ import { sqlValues } from '../../helpers/sqlValues';
 import { BlockPayload } from '$types/block';
 
 const blockInsertQuery = `
-    INSERT INTO blocks (title, subtitle, text, link_href, link_text, page_id, block_id, asset_id)
-    VALUES (:title, :subtitle, :text, :linkHref, :linkText, :pageId, :blockId, :assetId)`;
+    INSERT INTO blocks (title, subtitle, text, link_href, link_text, page_id, block_id, asset_id, map_id)
+    VALUES (:title, :subtitle, :text, :linkHref, :linkText, :pageId, :blockId, :assetId, :mapId)`;
 
 export const blockInsert = (payload: BlockPayload) => sqlValues(payload, blockInsertQuery);
 
@@ -14,7 +14,8 @@ const blockUpdateQuery = `
         text = COALESCE(:text, text), 
         link_href = COALESCE(:linkHref, link_href), 
         link_text = COALESCE(:linkText, link_text),
-        asset_id = COALESCE(:assetId, asset_id)
+        asset_id = COALESCE(:assetId, asset_id),
+        map_id = COALESCE(:mapId, map_id)
     WHERE id = :blockId`;
 
 export const blockUpdate = (blockId: number, payload: Partial<BlockPayload>) =>

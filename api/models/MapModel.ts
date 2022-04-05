@@ -1,12 +1,12 @@
 import { Model } from '$models/Model';
 import { mapDelete, mapInsert, mapSelect, mapsSelect, mapUpdate } from '$queries/mapQueries';
-import type { MapPayload } from '$types/map';
+import type { DetailedMap, MapPayload } from '$types/map';
 
 export class MapModel extends Model {
     async selectMaps() {
         return await this.query(mapsSelect());
     }
-    async selectMap(id: number) {
+    async selectMap(id: number): Promise<Omit<DetailedMap, 'links'>> {
         const r = await this.query(mapSelect(id));
         return r.reduce((acc, curr) => {
             if (!acc) {
@@ -25,7 +25,9 @@ export class MapModel extends Model {
                     id: curr.group_id,
                     name: curr.group_name,
                     picture: curr.group_picture,
-                    thumbnail: curr.group_thumbnail
+                    thumbnail: curr.group_thumbnail,
+                    nodeValue: curr.group_node_value,
+                    nodeColor: curr.group_node_color
                 });
             }
 
@@ -39,7 +41,9 @@ export class MapModel extends Model {
                     firstname: curr.individual_firstname,
                     lastname: curr.individual_lastname,
                     picture: curr.individual_picture,
-                    thumbnail: curr.individual_thumbnail
+                    thumbnail: curr.individual_thumbnail,
+                    nodeValue: curr.individual_node_value,
+                    nodeColor: curr.individual_node_color
                 });
             }
 

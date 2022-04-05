@@ -1,1 +1,1 @@
-export { ViewHome as default } from '$views/ViewHome/ViewHome';
+export { ViewHome as default, getServerSideProps } from '$views/ViewHome/ViewHome';

@@ -5,7 +5,7 @@ import { BlockPayload } from '$types/block';
 
 export class BlockModel extends Model {
     async create(payload: BlockPayload) {
-        const [{ insertId }]: RowDataPacket[] = await this.query(blockInsert(payload));
+        const { insertId }: RowDataPacket = await this.query(blockInsert(payload));
         return insertId;
     }
     async update(blockId: number, payload: Partial<BlockPayload>) {

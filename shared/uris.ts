@@ -63,6 +63,11 @@ export const mapEntryRoutes = {
     specific: `${prefix}/map-entry/:id`
 };
 
+export const menuRoutes = {
+    single: `${prefix}/menu`,
+    specific: `${prefix}/menu/:id`
+};
+
 export const migrationRoutes = {
     single: `${prefix}/migration`,
     multiple: `${prefix}/migrations`
@@ -70,7 +75,9 @@ export const migrationRoutes = {
 
 export const pageRoutes = {
     single: `${prefix}/page`,
-    specific: `${prefix}/page/:id`
+    multiple: `${prefix}/pages`,
+    specific: `${prefix}/page/:id`,
+    wildcard: `${prefix}/p/*`
 };
 
 export const pageBlockRoute = {

@@ -3,3 +3,4 @@ uploads/*
 .next
 node_modules
 dist
+public/uploads

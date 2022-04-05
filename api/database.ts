@@ -27,14 +27,6 @@ const connectToDb = (options: PoolOptions) => {
     return db;
 };
 
-console.log({
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : undefined,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD
-});
-
 const database = connectToDb({
     host: process.env.DB_HOST,
     database: process.env.DB_NAME,

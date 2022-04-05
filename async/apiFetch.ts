@@ -30,14 +30,23 @@ export const apiFetch = (url: string, options: any = {}) => {
         body = typeof options.body === 'object' ? JSON.stringify(options.body) : options.body;
     }
 
+    if (typeof window === 'undefined') {
+        url = 'http://localhost:' + (process.env.PORT || 3000) + url;
+        headers['origin'] = process.env.HOST;
+    }
+    console.log(url);
+
     return fetch(url, {
         ...options,
         headers,
         body
     }).then(async (r) => {
+        const t = await r.text();
         if (r.status > 299) {
-            throw await r.json();
+            throw await JSON.parse(t);
         }
-        return r.status !== 204 ? await r.json() : null;
+
+        if (!r) return null;
+        return r.status !== 204 ? JSON.parse(t) : null;
     });
 };

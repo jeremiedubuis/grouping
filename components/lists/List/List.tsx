@@ -1,7 +1,7 @@
-import React, {MouseEventHandler, ReactNode} from 'react';
+import React, { MouseEventHandler, ReactNode } from 'react';
 import styles from './List.module.css';
-import {IconButton} from '../../buttons/IconButton/IconButton';
-import Link from 'next/link'
+import { IconButton } from '../../buttons/IconButton/IconButton';
+import Link from 'next/link';
 
 type ListProps = {
     items: {
@@ -17,26 +17,31 @@ type ListProps = {
         }[];
     }[];
 };
-export const List: React.FC<ListProps> = ({items}) => {
+export const List: React.FC<ListProps> = ({ items }) => {
     return (
         <ul className={styles.list}>
             {items.map((i) => {
-
-                const content = <>
-                    <div className={styles.name}>{i.name}</div>
-                    <span className={styles.flags}>{i.subtitle}</span>
-                </>
+                const content = (
+                    <>
+                        <div className={styles.name}>{i.name}</div>
+                        <span className={styles.flags}>{i.subtitle}</span>
+                    </>
+                );
 
                 return (
                     <li key={i.id}>
                         {i.picture ? (
-                            <img src={i.picture} alt=""/>
-                        ) : (
+                            <img src={i.picture} alt="" />
+                        ) : i.initials ? (
                             <div className={styles.initials}>{i.initials}</div>
+                        ) : null}
+                        {i.link ? (
+                            <Link href={i.link}>
+                                <a className={styles.content}>{content}</a>
+                            </Link>
+                        ) : (
+                            <div className={styles.content}>{content}</div>
                         )}
-                        {i.link ? <Link href={i.link}><a className={styles.content}>{content}</a></Link> : <div className={styles.content}>
-                            {content}
-                        </div>}
                         <ul className={styles.buttons}>
                             {i.buttons.map((b, i) => {
                                 return (
@@ -47,7 +52,7 @@ export const List: React.FC<ListProps> = ({items}) => {
                             })}
                         </ul>
                     </li>
-                )
+                );
             })}
         </ul>
     );

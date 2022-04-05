@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { BoNav } from './Nav/BoNav';
 import { useRouter } from 'next/router';
 import { asyncLoginFromToken } from '../../async/asyncUser';
+import { MenuLink } from '$types/menuLink';
 
-export const BoLayout: React.FC = ({ children }) => {
+export const BoLayout: React.FC<{ menu: MenuLink[] }> = ({ children }) => {
     const [loaded, setLoaded] = useState(false);
     const { pathname, push } = useRouter();
     useEffect(() => {

@@ -6,6 +6,17 @@ import { AssetModel } from '$models/AssetModel';
 import { v4 } from 'uuid';
 
 export class PageHandler extends Handler {
+    async selectPage(req: Request) {
+        return this.success(await new PageModel().select(req.url.replace(/^\/api\/p\//, '')), 200);
+    }
+    async selectBoPage(req: Request) {
+        return this.success(await new PageModel().selectFromId(parseInt(req.params.id)), 200);
+    }
+
+    async selectPages() {
+        return this.success(await new PageModel().selectPages(), 200);
+    }
+
     async createPage(req: Request) {
         const id = await new PageModel().create(req.body);
         return this.success({ id }, 201);

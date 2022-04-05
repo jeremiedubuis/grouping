@@ -4,6 +4,13 @@ import { Method } from '$types/server';
 import { PageHandler } from '$handlers/PageHandler';
 
 export const createRoutes = (app: any) => {
+    new ApiRoute(app, pageRoutes.wildcard, Method.GET, PageHandler.handle('selectPage'), {
+        allowDisconnected: true
+    });
+    new ApiRoute(app, pageRoutes.specific, Method.GET, PageHandler.handle('selectBoPage'));
+    new ApiRoute(app, pageRoutes.multiple, Method.GET, PageHandler.handle('selectPages'), {
+        allowDisconnected: true
+    });
     new ApiRoute(app, pageRoutes.single, Method.POST, PageHandler.handle('createPage'), {
         body: {
             path: 'string',
@@ -38,11 +45,12 @@ export const createRoutes = (app: any) => {
             linkHref: 'string|optional',
             linkText: 'string|optional',
             pageId: 'number|optional',
+            mapId: 'number|optional',
             blockId: 'number|optional',
             assetId: 'number|optional'
         }
     });
-    new ApiRoute(app, pageRoutes.specific, Method.PUT, PageHandler.handle('updateBlock'), {
+    new ApiRoute(app, pageBlockRoute.specific, Method.PUT, PageHandler.handle('updateBlock'), {
         params: {
             id: 'string'
         },
@@ -53,11 +61,12 @@ export const createRoutes = (app: any) => {
             linkHref: 'string|optional',
             linkText: 'string|optional',
             pageId: 'number|optional',
+            mapId: 'number|optional',
             blockId: 'number|optional',
             assetId: 'number|optional'
         }
     });
-    new ApiRoute(app, pageRoutes.specific, Method.DELETE, PageHandler.handle('deleteBlock'), {
+    new ApiRoute(app, pageBlockRoute.specific, Method.DELETE, PageHandler.handle('deleteBlock'), {
         params: {
             id: 'string'
         }

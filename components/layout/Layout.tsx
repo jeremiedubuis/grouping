@@ -1,11 +1,12 @@
 import styles from './Layout.module.css';
 import React from 'react';
+import { MenuLink } from '$types/menuLink';
+import { Nav } from '$components/layout/Nav/Nav';
 
-export const Layout: React.FC = ({ children }) => (
+export const Layout: React.FC<{ menu: MenuLink[] }> = ({ children, menu }) => (
     <div className={styles.layout}>
-        <header className={styles.header}>
-            <h1>Titre</h1>
-        </header>
+        <Nav menu={menu} />
+
         {children}
     </div>
 );

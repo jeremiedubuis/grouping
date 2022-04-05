@@ -43,6 +43,7 @@ export type ModularFormProps = {
     handleSameNameFieldValues?: SameNameFieldValuesHandler;
     onSubmit?: (e: React.FormEvent<HTMLFormElement>, data: { [field: string]: any }) => void;
     onSubmitError?: (e: React.SyntheticEvent, data: Data) => unknown;
+    parseAccessors?: boolean;
     [attribute: string]: any;
 };
 

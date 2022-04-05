@@ -1,17 +1,25 @@
 import { sqlValues } from '../../helpers/sqlValues';
 import { PagePayload } from '$types/page';
-
-const pageSelectQuery = `
-    SELECT p.id, p.title, p.template, p.meta_title, p.meta_description,
+const pagesSelectQuery = `
+    SELECT p.id, p.title, p.template, p.meta_title, p.meta_description, p.path,
            b.id AS block_id, b.title AS block_title, b.subtitle AS block_subtitle, b.text AS block_text,
-           b.link_text AS block_link_text, b.link_href As block_link_href,
+           b.link_text AS block_link_text, b.link_href As block_link_href, b.map_id AS block_map_id,
            a.path AS block_asset
     FROM pages p
     LEFT JOIN blocks b ON b.page_id = p.id
-    LEFT JOIN assets a on b.asset_id = a.id
+    LEFT JOIN assets a on b.asset_id = a.id`;
+
+export const pagesSelect = () => sqlValues({}, pagesSelectQuery);
+
+const pageSelectQuery = `${pagesSelectQuery}
     WHERE p.path = :path`;
 
 export const pageSelect = (path: string) => sqlValues({ path }, pageSelectQuery);
+
+const pageSelectFromIdQuery = `${pagesSelectQuery}
+    WHERE p.id = :id`;
+
+export const pageSelectFromId = (id: number) => sqlValues({ id }, pageSelectFromIdQuery);
 
 const pageInsertQuery = `
     INSERT INTO pages (path, title, template, meta_title, meta_description)

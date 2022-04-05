@@ -4,6 +4,6 @@ import { Network } from '$components/network/Network';
 
 export const ViewDashboard: React.FC = () => (
     <main className={styles.view}>
-        <Network />
+        <Network linksOnHover />
     </main>
 );

@@ -60,7 +60,7 @@ export const ModularFormField: React.FC<ModularFormFieldProps> = ({
 
             return () => form.unregisterField(id);
         }
-    }, []);
+    }, [name]);
 
     const sharedProps = {
         children,

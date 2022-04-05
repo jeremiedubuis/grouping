@@ -5,6 +5,7 @@ import { MapEntryModel } from '$models/MapEntryModel';
 import { LinkModel } from '$models/LinkModel';
 import { IndividualModel } from '$models/IndividualModel';
 import { ApiError } from '../ApiError';
+import { DetailedMap } from '$types/map';
 
 export class MapHandler extends Handler {
     async selectMaps() {
@@ -12,7 +13,29 @@ export class MapHandler extends Handler {
     }
 
     async selectMap(req: Request) {
-        return this.success(await new MapModel().selectMap(parseInt(req.params.id)), 200);
+        const mapId = parseInt(req.params.id);
+        const _map: Omit<DetailedMap, 'links'> = await new MapModel().selectMap(mapId);
+        const links = await new LinkModel().selectAll();
+        return this.success(
+            {
+                ..._map,
+                links: links.filter((l) => {
+                    if (l.g1_id) {
+                        if (!_map.groups.find((g) => g.id === l.g1_id)) return false;
+                    } else {
+                        if (!_map.individuals.find((i) => i.id === l.i1_id)) return false;
+                    }
+
+                    if (l.g2_id) {
+                        if (_map.groups.find((g) => g.id === l.g2_id)) return true;
+                    } else {
+                        if (_map.individuals.find((i) => i.id === l.i2_id)) return true;
+                    }
+                    return false;
+                })
+            } as DetailedMap,
+            200
+        );
     }
 
     async mapFillFromIndividualLinks(req: Request) {

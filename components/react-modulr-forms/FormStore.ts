@@ -4,15 +4,13 @@ import { FieldError, ModularFieldType } from './enums';
 import { FormField } from './FormField';
 import { config } from './config';
 import { RefObject } from 'react';
+import { accessorsToObject } from '$helpers/accessorsToObject';
 
 const forms: FormStore[] = [];
 
 export class FormStore {
-    static getForm(id: string, handleSameNameFieldValues?: SameNameFieldValuesHandler) {
-        return (
-            forms.find((f) => f.id === id) ||
-            forms[forms.push(new FormStore(id, handleSameNameFieldValues)) - 1]
-        );
+    static getForm(id: string) {
+        return forms.find((f) => f.id === id) || forms[forms.push(new FormStore(id)) - 1];
     }
 
     private id: string;
@@ -22,11 +20,22 @@ export class FormStore {
 
     private disableTimeout: any;
     private disableDebounce = false;
+    private parseAccessors = false;
 
-    constructor(id: string, handleSameNameFieldValues?: SameNameFieldValuesHandler) {
+    set(handleSameNameFieldValues?: SameNameFieldValuesHandler, parseAccessors?: boolean) {
+        if (handleSameNameFieldValues) this.handleSameNameFieldValues = handleSameNameFieldValues;
+        this.parseAccessors = !!parseAccessors;
+    }
+
+    constructor(
+        id: string,
+        handleSameNameFieldValues?: SameNameFieldValuesHandler,
+        parseAccessors?: boolean
+    ) {
         this.id = id;
         this.handleSameNameFieldValues =
             handleSameNameFieldValues || config.handleSameNameFieldValues;
+        this.parseAccessors = !!parseAccessors;
     }
 
     registerField(
@@ -61,6 +70,7 @@ export class FormStore {
     }
 
     unregisterField(id: string) {
+        console.log('un', id);
         const index = this.fields.findIndex((f) => f.id === id);
         if (this.fields[index].disableOnInvalidForm)
             this.fieldsToDisable.splice(this.fieldsToDisable.indexOf(this.fields[index]), 1);
@@ -151,6 +161,9 @@ export class FormStore {
                 )
             };
         });
+        if (this.parseAccessors) {
+            values = accessorsToObject(values);
+        }
         return values;
     }
 

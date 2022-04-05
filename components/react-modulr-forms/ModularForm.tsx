@@ -8,13 +8,15 @@ export const ModularForm: React.FC<ModularFormProps> = ({
     onSubmit,
     onSubmitError,
     handleSameNameFieldValues,
+    parseAccessors,
     ...intrinsic
 }) => (
     <form
         id={id}
         {...intrinsic}
         onSubmit={(e) => {
-            const form = FormStore.getForm(id, handleSameNameFieldValues);
+            const form = FormStore.getForm(id);
+            form.set(handleSameNameFieldValues, parseAccessors);
             const errors = form.getErrors(false);
             if (!errors.length) {
                 onSubmit?.(e, form.getValues());
