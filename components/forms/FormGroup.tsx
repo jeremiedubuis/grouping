@@ -72,6 +72,14 @@ export const FormGroup: React.FC<FormGroupProps> = ({
             />
             <ModularFormField
                 formId={id}
+                id={'group-description' + idSuffix}
+                name="description"
+                label="Description"
+                value={data.description}
+                type={ModularFieldType.Textarea}
+            />
+            <ModularFormField
+                formId={id}
                 id={'group-submit' + idSuffix}
                 value={submitText}
                 type={ModularFieldType.Submit}

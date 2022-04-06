@@ -2,8 +2,8 @@ import { sqlValues } from '../../helpers/sqlValues';
 import { GroupPayload } from '$types/group';
 
 const groupInsertQuery = `
-    INSERT INTO groups (name, name_slug, group_type_id, default_node_value, default_node_color, asset_id)
-    SELECT :name, :nameSlug, gt.id, :defaultNodeValue, :defaultNodeColor, :assetId
+    INSERT INTO groups (name, name_slug, group_type_id, default_node_value, default_node_color, asset_id, description)
+    SELECT :name, :nameSlug, gt.id, :defaultNodeValue, :defaultNodeColor, :assetId, :description
     FROM group_types gt
     WHERE gt.type = :type`;
 
@@ -18,7 +18,8 @@ const groupUpdateQuery = `
         g.group_type_id = COALESCE(gt.id, g.group_type_id),
         g.default_node_value = COALESCE(:defaultNodeValue, g.default_node_value),
         g.default_node_color = COALESCE(:defaultNodeColor, g.default_node_color),
-        g.asset_id = COALESCE(:assetId, g.asset_id)
+        g.asset_id = COALESCE(:assetId, g.asset_id),
+        g.description  = COALESCE(:description, g.description)
     WHERE g.id = :id`;
 
 export const groupUpdate = (id: number, payload: Partial<GroupPayload>, nameSlug) =>
