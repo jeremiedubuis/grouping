@@ -21,7 +21,12 @@ export const ViewHome: React.FC<{ page: DetailedPage }> = ({ page }) => {
                 )}
             </Head>
             <header>
-                <h1>{page.title}</h1>
+                <h1>
+                    {page.title}{' '}
+                    <div className={styles.h1Copy} aria-hidden={true}>
+                        {page.title}
+                    </div>
+                </h1>
                 <p>{page.blocks?.[0].text}</p>
             </header>
             {page.blocks[1]?.mapId && <Network mapId={page.blocks[1].mapId} />}

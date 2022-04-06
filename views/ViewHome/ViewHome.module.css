@@ -7,8 +7,35 @@
 }
 
 .view header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    margin-top: 50px;
+    margin-top: 20px;
+}
+
+.view h1 {
+    flex: 0 0 auto;
+    position: relative;
+    display: flex;
+    text-transform: uppercase;
+    font-style: italic;
+    font-size: 5rem;
+    margin-bottom: 10px;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.h1Copy {
+    z-index: -1;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    font-size: 5.1rem;
+    background: linear-gradient(-45deg, #eeaa52, #e73c6f, #2394d5, #2af3b7);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 8px transparent;
+    color: #fff;
 }
 
 .view > p {
