@@ -1,0 +1,30 @@
+.nav {
+    position: absolute;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: var(--color-bg-toned-down);
+}
+
+.button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    border: 0;
+    outline: 0;
+
+
+}
+
+.button svg {
+    width: 30px;
+    height: 30px;
+}
+
+.navOpen {
+    left: 0;
+}
+
+.buttonNavOpen {
+left: 270px;
+}
