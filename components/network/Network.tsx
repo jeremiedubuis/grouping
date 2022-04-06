@@ -5,6 +5,9 @@ import { asyncGroupsFetch } from '../../async/asyncGroups';
 import { asyncIndividualsFetch } from '../../async/asyncIndividuals';
 import { asyncMapFetch } from '../../async/asyncMaps';
 import type { DisplayedMap } from '$types/map';
+import { Loader } from '$components/layout/Loader/Loader';
+import { Panel } from '$components/layout/Panel/Panel';
+import { PanelEntityContent } from '$views/bo/ViewPage/components/PanelEntityContent/PanelEntityContent';
 
 const NetworkComponent = lazy(() => import('$components/network/D3Network'));
 
@@ -13,6 +16,10 @@ export const Network: React.FC<{ mapId?: number; linksOnHover?: boolean }> = ({
     linksOnHover
 }) => {
     const [map, setMap] = useState<DisplayedMap>();
+    const [activeEntity, setActiveEntity] = useState<{
+        id: number;
+        type: 'individual' | 'group';
+    } | null>(null);
     useEffect(() => {
         if (mapId) {
             asyncMapFetch(mapId).then(setMap);
@@ -23,13 +30,24 @@ export const Network: React.FC<{ mapId?: number; linksOnHover?: boolean }> = ({
         }
     }, []);
 
+    useEffect(() => {
+        console.log(activeEntity);
+    }, [activeEntity]);
+
     return (
         <div className={styles.wrapper}>
             {map && (
-                <Suspense fallback={<div>Chargement...</div>}>
-                    <NetworkComponent map={map} linksOnHover={linksOnHover} />
+                <Suspense fallback={<Loader />}>
+                    <NetworkComponent
+                        map={map}
+                        linksOnHover={linksOnHover}
+                        setActiveEntity={setActiveEntity}
+                    />
                 </Suspense>
             )}
+            <Panel close={() => setActiveEntity(null)}>
+                {activeEntity ? <PanelEntityContent {...activeEntity} /> : null}
+            </Panel>
         </div>
     );
 };

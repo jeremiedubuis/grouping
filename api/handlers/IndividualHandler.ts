@@ -8,6 +8,12 @@ export class IndividualHandler extends Handler {
     async selectAll() {
         return this.success(await new IndividualModel().selectAll(), 200);
     }
+    async select(req: Request) {
+        return this.success(
+            await new IndividualModel().selectFromId(parseInt(req.params.individualId)),
+            200
+        );
+    }
 
     async create(req: Request) {
         if (req.body.picture) {

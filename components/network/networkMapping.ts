@@ -26,8 +26,8 @@ const mapVisGroup = (g: MapGroup | Group) => ({
 });
 
 const mapVisEdge = (l: BaseLink) => ({
-    from: l.g1_id || 10000 + (l.i1_id as number),
-    to: l.g2_id || 10000 + (l.i2_id as number),
+    from: l.g1_id || 100000 + (l.i1_id as number),
+    to: l.g2_id || 100000 + (l.i2_id as number),
     dashes: l.type === 'unknown',
     color: l.type === 'past' ? 'red' : 'black'
 });

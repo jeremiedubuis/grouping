@@ -12,6 +12,7 @@ export const mapSQLGroups = (results: RowDataPacket[]): GroupWithFlags[] => {
                     name: row.name,
                     type: row.type,
                     picture: row.picture,
+                    description: row.description,
                     thumbnail: row.thumbnail,
                     defaultNodeValue: row.defaultNodeValue,
                     defaultNodeColor: row.defaultNodeColor,

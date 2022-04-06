@@ -62,6 +62,14 @@ export const FormIndividual: React.FC<FormIndividualProps> = ({
             />
             <ModularFormField
                 formId={id}
+                id={'individual-description' + idSuffix}
+                name="description"
+                label="Description"
+                value={data.description}
+                type={ModularFieldType.Textarea}
+            />
+            <ModularFormField
+                formId={id}
                 id={'individual-submit' + idSuffix}
                 value={submitText}
                 type={ModularFieldType.Submit}

@@ -2,8 +2,8 @@ import { sqlValues } from '../../helpers/sqlValues';
 import type { IndividualPayload, IndividualUpdatePayload, Slugs } from '$types/individual';
 
 const insertIndividualQuery = `
-    INSERT INTO individuals (firstname, firstname_slug, lastname, lastname_slug,  default_node_value, default_node_color, asset_id) 
-    VALUES (:firstname, :firstnameSlug, :lastname, :lastnameSlug, :defaultNodeValue, :defaultNodeColor, :assetId)`;
+    INSERT INTO individuals (firstname, firstname_slug, lastname, lastname_slug,  default_node_value, default_node_color, asset_id, description) 
+    VALUES (:firstname, :firstnameSlug, :lastname, :lastnameSlug, :defaultNodeValue, :defaultNodeColor, :assetId, :description)`;
 
 export const insertIndividual = (payload: IndividualPayload, slugs: Slugs) =>
     sqlValues({ ...payload, ...slugs }, insertIndividualQuery);
@@ -16,7 +16,8 @@ export const updateIndividualQuery = `
         lastname_slug = COALESCE(:lastnameSlug, lastname_slug),
         asset_id = COALESCE(:assetId, asset_id),
         default_node_value = COALESCE(:defaultNodeValue, default_node_value),
-        default_node_color = COALESCE(:defaultNodeColor, default_node_color)
+        default_node_color = COALESCE(:defaultNodeColor, default_node_color),
+        description = COALESCE(:description, description)
     WHERE id = :individualId`;
 
 export const updateIndividual = (payload: IndividualUpdatePayload, slugs: Partial<Slugs> = {}) =>
@@ -30,7 +31,7 @@ export const deleteIndividual = (individualId: number) =>
 
 const selectIndividualsQuery = `
     SELECT 
-           i.id, i.firstname, i.lastname, i.description, i.default_node_value AS defaultNodeValue, i.default_node_color AS defaultNodeColor,  
+           i.id, i.firstname, i.lastname, i.description, i.default_node_value AS defaultNodeValue, i.default_node_color AS defaultNodeColor,  i.description,
            a.path AS picture, a.thumbnail,
            f.id AS flagId, f.name AS flagName, ifv.id as entityFlagId, fv.value AS flagValue, fv.id As flagValueId
     FROM individuals i

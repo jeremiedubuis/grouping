@@ -13,6 +13,12 @@ export const createRoutes = (app: any) => {
             allowDisconnected: true
         }
     );
+    new ApiRoute(app, individualRoutes.specific, Method.GET, IndividualHandler.handle('select'), {
+        allowDisconnected: true,
+        params: {
+            individualId: 'string'
+        }
+    });
     new ApiRoute(
         app,
         individualRoutes.single,

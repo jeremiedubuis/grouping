@@ -13,6 +13,7 @@ export const mapSQLIndividuals = (results: RowDataPacket[]): IndividualWithFlags
                     lastname: row.lastname,
                     picture: row.picture,
                     thumbnail: row.thumbnail,
+                    description: row.description,
                     defaultNodeValue: row.defaultNodeValue,
                     defaultNodeColor: row.defaultNodeColor,
                     flags: {}

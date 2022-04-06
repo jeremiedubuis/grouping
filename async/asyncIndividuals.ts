@@ -7,6 +7,10 @@ export const asyncIndividualsFetch = (): Promise<IndividualWithFlags[]> =>
     apiFetch(individualRoutes.multiple, {
         method: 'GET'
     });
+export const asyncIndividualFetch = (individualId: number): Promise<IndividualWithFlags> =>
+    apiFetch(pathWithParams(individualRoutes.specific, { individualId: individualId.toString() }), {
+        method: 'GET'
+    });
 
 export const asyncIndividualCreate = (payload: IndividualPayload) =>
     apiFetch(individualRoutes.single, {

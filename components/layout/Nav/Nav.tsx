@@ -16,26 +16,24 @@ export const Nav: React.FC<{ menu: MenuLink[] }> = ({ menu }) => {
             >
                 {isOpen ? <IoMdClose /> : <FiMenu />}
             </button>
-            {isOpen && (
-                <nav className={cn(styles.nav, isOpen && styles.navOpen)}>
-                    <ul>
-                        {menu?.map((l) => {
-                            const content =
-                                l.target === '_self' ? (
-                                    <Link href={l.href as string}>
-                                        <a>{l.text}</a>
-                                    </Link>
-                                ) : (
-                                    <a href={l.href} target={l.target}>
-                                        {l.text}
-                                    </a>
-                                );
+            <nav className={cn(styles.nav, isOpen && styles.navOpen)}>
+                <ul>
+                    {menu?.map((l) => {
+                        const content =
+                            l.target === '_self' ? (
+                                <Link href={l.href as string}>
+                                    <a>{l.text}</a>
+                                </Link>
+                            ) : (
+                                <a href={l.href} target={l.target}>
+                                    {l.text}
+                                </a>
+                            );
 
-                            return <li key={l.id}>{content}</li>;
-                        })}
-                    </ul>
-                </nav>
-            )}
+                        return <li key={l.id}>{content}</li>;
+                    })}
+                </ul>
+            </nav>
         </>
     );
 };

@@ -14,13 +14,14 @@ type RenderedNode = {
     radius: number;
 };
 
-const getCoords = (e: any) =>
+const getCoords = (e: any): [x: number, y: number] =>
     e.touches && e.touches[0]
         ? [e.touches[0].clientX, e.touches[0].clientY]
         : [e.clientX, e.clientY];
 
 type D3NetworkGraphOptions = {
     linksOnHover?: boolean;
+    setActiveEntity?: (id: number, type: 'group' | 'individual') => void;
 };
 
 class D3NetworkGraph {
@@ -203,23 +204,27 @@ class D3NetworkGraph {
         select(this.context.canvas).node();
     }
 
+    findNodesFromCoords(coords: [x: number, y: number]) {
+        return this.renderedNodes.filter(({ x, y, radius }) => {
+            return (
+                Math.pow(coords[0] - x - this.left, 2) + Math.pow(coords[1] - y - this.top, 2) <
+                Math.pow(radius, 2)
+            );
+        });
+    }
+
     addEventListeners() {
         this.parent.addEventListener(
             'mousemove',
             throttle((e) => {
                 this.context.restore();
                 const prevHoveredNodes = this.hoveredNodes;
-                this.hoveredNodes = this.renderedNodes.filter(({ x, y, radius }) => {
-                    return (
-                        Math.pow(e.offsetX - x - this.left, 2) +
-                            Math.pow(e.offsetY - y - this.top, 2) <
-                        Math.pow(radius, 2)
-                    );
-                });
+                this.hoveredNodes = this.findNodesFromCoords([e.offsetX, e.offsetY]);
 
                 if (!isEqual(this.hoveredNodes, prevHoveredNodes)) this.update();
             }, 10)
         );
+        const downEvents = ['mousedown', 'touchstart'];
 
         if (
             this.parent.offsetWidth < this.canvas.width ||
@@ -235,7 +240,6 @@ class D3NetworkGraph {
                 this.canvas.style.top = `${this.top}px`;
             }
 
-            const downEvents = ['mousedown', 'touchstart'];
             const moveEvents = ['mousemove', 'touchmove'];
             const upEvents = ['mouseup', 'touchend'];
             let down: boolean = false;
@@ -270,6 +274,19 @@ class D3NetworkGraph {
             this.canvas.style.left = `${this.left}px`;
             this.canvas.style.top = `${this.top}px`;
         }
+        downEvents.map((event) =>
+            this.parent.addEventListener(event, (e: any) => {
+                const clickedNodes = this.findNodesFromCoords([e.offsetX, e.offsetY]);
+                if (clickedNodes.length) {
+                    this.options.setActiveEntity?.(
+                        clickedNodes[0].id > 100000
+                            ? clickedNodes[0].id - 100000
+                            : clickedNodes[0].id,
+                        clickedNodes[0].type
+                    );
+                }
+            })
+        );
     }
 
     update() {
@@ -278,15 +295,21 @@ class D3NetworkGraph {
     }
 }
 
-export const D3Network: React.FC<{ map: DisplayedMap; linksOnHover?: boolean }> = ({
-    map,
-    linksOnHover
-}) => {
+export const D3Network: React.FC<{
+    map: DisplayedMap;
+    linksOnHover?: boolean;
+    setActiveEntity: (entity: { id: number; type: 'individual' | 'group' }) => void;
+}> = ({ map, linksOnHover, setActiveEntity }) => {
     const ref = useRef<HTMLCanvasElement>(null);
     const graph = useRef<D3NetworkGraph>();
     useEffect(() => {
         if (ref.current) {
-            graph.current = new D3NetworkGraph(ref.current, map, { linksOnHover });
+            graph.current = new D3NetworkGraph(ref.current, map, {
+                linksOnHover,
+                setActiveEntity: (id, type) => {
+                    setActiveEntity({ id, type });
+                }
+            });
         }
     }, []);
 

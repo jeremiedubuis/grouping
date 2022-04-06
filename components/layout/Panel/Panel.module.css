@@ -1,0 +1,29 @@
+.panel {
+    position: absolute;
+    top: 0;
+    width: 300px;
+    right: -300px;
+    height: 100%;;
+    background: var(--color-bg-toned-down);
+    transition: left ease-in 0.2s;
+    padding: 100px 40px 0;
+    box-sizing: border-box;
+}
+
+.panelOpen {
+    right: 0;
+}
+
+.button {
+    position: absolute;
+    top: 20px;
+    right: 320px;
+    border: 0;
+    outline: 0;
+    transition: left ease-in 0.2s;
+}
+
+.button svg {
+    width: 30px;
+    height: 30px;
+}
