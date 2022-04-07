@@ -40,6 +40,7 @@ class D3NetworkGraph {
     left: number = 0;
     top: number = 0;
     options: D3NetworkGraphOptions;
+    scale: number = 1;
     constructor(canvas: HTMLCanvasElement, map: DisplayedMap, options: D3NetworkGraphOptions) {
         const { mappedNodes, mappedEdges } = mapD3Network(map);
         this.nodes = mappedNodes;
@@ -61,6 +62,7 @@ class D3NetworkGraph {
         });
     }
 
+    activeNode?: RenderedNode;
     renderedNodes: RenderedNode[] = [];
     hoveredNodes: RenderedNode[] = [];
 
@@ -99,6 +101,7 @@ class D3NetworkGraph {
         }
 
         this.renderHovered(this.hoveredNodes);
+        if (this.activeNode) this.renderActive(this.activeNode);
         const now = Date.now();
         this.lastTick = now;
     };
@@ -115,8 +118,8 @@ class D3NetworkGraph {
             this.context.setLineDash([5, 5]);
         }
         this.context.lineWidth = 3;
-        this.context.moveTo(d.source.x, d.source.y);
-        this.context.lineTo(d.target.x, d.target.y);
+        this.context.moveTo(d.source.x * this.scale, d.source.y * this.scale);
+        this.context.lineTo(d.target.x * this.scale, d.target.y * this.scale);
         this.context.strokeStyle = '#aaa';
         this.context.stroke();
         this.context.setLineDash([]);
@@ -126,12 +129,12 @@ class D3NetworkGraph {
         this.context.beginPath();
         const radius = 30 + d.value * 2;
 
-        this.context.moveTo(d.x + radius, d.y);
+        this.context.moveTo(d.x + radius * this.scale, d.y * this.scale);
         this.context.fillStyle = d.color;
-        this.context.arc(d.x, d.y, radius, 0, 2 * Math.PI);
+        this.context.arc(d.x * this.scale, d.y * this.scale, radius * this.scale, 0, 2 * Math.PI);
         this.context.textAlign = 'center';
         this.context.font = '14px Arial';
-        this.context.fillText(d.name, d.x, d.y + radius + 25);
+        this.context.fillText(d.name, d.x * this.scale, (d.y + radius + 25) * this.scale);
 
         this.context.fillStyle = color(d);
         this.context.fill();
@@ -155,20 +158,27 @@ class D3NetworkGraph {
     renderImage = (d, radius) => {
         const img = this.loadedImages[d.thumbnail];
         const ctx = this.getScratchContext(radius);
-        ctx.drawImage(img, 0, 0, radius * 2, radius * 2);
+        ctx.drawImage(img, 0, 0, radius * 2 * this.scale, radius * 2 * this.scale);
         ctx.fillStyle = '#fff'; //color doesn't matter, but we want full opacity
         ctx.globalCompositeOperation = 'destination-in';
         ctx.beginPath();
-        ctx.arc(radius, radius, radius, 0, 2 * Math.PI, true);
+        ctx.arc(
+            radius * this.scale,
+            radius * this.scale,
+            radius * this.scale,
+            0,
+            2 * Math.PI,
+            true
+        );
         ctx.closePath();
         ctx.fill();
         ctx.globalCompositeOperation = 'source-over';
         this.context.drawImage(
             this.scratchCanvas as HTMLCanvasElement,
-            d.x - radius,
-            d.y - radius,
-            radius * 2,
-            radius * 2
+            (d.x - radius) * this.scale,
+            (d.y - radius) * this.scale,
+            radius * 2 * this.scale,
+            radius * 2 * this.scale
         );
     };
 
@@ -178,9 +188,31 @@ class D3NetworkGraph {
             this.context.beginPath();
             this.context.strokeStyle = 'blue';
             this.context.lineWidth = 3;
-            this.context.arc(n.x, n.y, n.radius, 0, 2 * Math.PI, true);
+            this.context.arc(
+                n.x * this.scale,
+                n.y * this.scale,
+                n.radius * this.scale,
+                0,
+                2 * Math.PI,
+                true
+            );
             this.context.stroke();
         });
+    }
+
+    renderActive(n: RenderedNode) {
+        this.context.beginPath();
+        this.context.strokeStyle = 'cyan';
+        this.context.lineWidth = 3;
+        this.context.arc(
+            n.x * this.scale,
+            n.y * this.scale,
+            n.radius * this.scale,
+            0,
+            2 * Math.PI,
+            true
+        );
+        this.context.stroke();
     }
 
     addForce() {
@@ -193,7 +225,7 @@ class D3NetworkGraph {
                     }) // This provide  the id of a node
                     .links(this.edges) // and this the list of links
             )
-            .force('charge', forceManyBody().strength(-5000)) // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+            .force('charge', forceManyBody().strength(-5000 * this.scale)) // This adds repulsion between nodes. Play with the -400 for the repulsion strength
             .force('center', forceCenter(this.width / 2, this.height / 2)) // This force attracts nodes to the center of the svg area
             .on('end', () => {
                 const now = Date.now();
@@ -213,19 +245,7 @@ class D3NetworkGraph {
         });
     }
 
-    addEventListeners() {
-        this.parent.addEventListener(
-            'mousemove',
-            throttle((e) => {
-                this.context.restore();
-                const prevHoveredNodes = this.hoveredNodes;
-                this.hoveredNodes = this.findNodesFromCoords([e.offsetX, e.offsetY]);
-
-                if (!isEqual(this.hoveredNodes, prevHoveredNodes)) this.update();
-            }, 10)
-        );
-        const downEvents = ['mousedown', 'touchstart'];
-
+    setSizeAndReturnShouldDrag() {
         if (
             this.parent.offsetWidth < this.canvas.width ||
             this.parent.offsetHeight < this.canvas.height
@@ -239,7 +259,31 @@ class D3NetworkGraph {
                 this.canvas.style.left = `${this.left}px`;
                 this.canvas.style.top = `${this.top}px`;
             }
+            return true;
+        }
 
+        this.left = (this.parent.offsetWidth - this.canvas.width) / 2;
+        this.top = (this.parent.offsetHeight - this.canvas.height) / 2;
+        this.canvas.style.left = `${this.left}px`;
+        this.canvas.style.top = `${this.top}px`;
+
+        return false;
+    }
+
+    addEventListeners() {
+        this.parent.addEventListener(
+            'mousemove',
+            throttle((e) => {
+                this.context.restore();
+                const prevHoveredNodes = this.hoveredNodes;
+                this.hoveredNodes = this.findNodesFromCoords([e.offsetX, e.offsetY]);
+
+                if (!isEqual(this.hoveredNodes, prevHoveredNodes)) this.update();
+            }, 10)
+        );
+        const downEvents = ['mousedown', 'touchstart'];
+
+        if (this.setSizeAndReturnShouldDrag()) {
             const moveEvents = ['mousemove', 'touchmove'];
             const upEvents = ['mouseup', 'touchend'];
             let down: boolean = false;
@@ -268,16 +312,14 @@ class D3NetworkGraph {
                     down = false;
                 })
             );
-        } else {
-            this.left = (this.parent.offsetWidth - this.canvas.width) / 2;
-            this.top = (this.parent.offsetHeight - this.canvas.height) / 2;
-            this.canvas.style.left = `${this.left}px`;
-            this.canvas.style.top = `${this.top}px`;
         }
+
         downEvents.map((event) =>
             this.parent.addEventListener(event, (e: any) => {
                 const clickedNodes = this.findNodesFromCoords([e.offsetX, e.offsetY]);
                 if (clickedNodes.length) {
+                    this.activeNode = clickedNodes[0];
+                    this.update();
                     this.options.setActiveEntity?.(
                         clickedNodes[0].id > 100000
                             ? clickedNodes[0].id - 100000
@@ -287,6 +329,11 @@ class D3NetworkGraph {
                 }
             })
         );
+
+        this.parent.addEventListener('wheel', (e) => {
+            this.scale = Math.max(0.5, this.scale + e.deltaY * 0.05);
+            this.update();
+        });
     }
 
     update() {
