@@ -17,7 +17,9 @@ export const createRoutes = (app: any) => {
             template: 'string',
             title: 'string|optional',
             metaTitle: 'string|optional',
-            metaDescription: 'string|optional'
+            metaDescription: 'string|optional',
+            individualId: 'number|optional',
+            groupId: 'number|optional'
         }
     });
     new ApiRoute(app, pageRoutes.specific, Method.PUT, PageHandler.handle('updatePage'), {
@@ -47,7 +49,8 @@ export const createRoutes = (app: any) => {
             pageId: 'number|optional',
             mapId: 'number|optional',
             blockId: 'number|optional',
-            assetId: 'number|optional'
+            assetId: 'number|optional',
+            identifier: 'string'
         }
     });
     new ApiRoute(app, pageBlockRoute.specific, Method.PUT, PageHandler.handle('updateBlock'), {
@@ -63,7 +66,8 @@ export const createRoutes = (app: any) => {
             pageId: 'number|optional',
             mapId: 'number|optional',
             blockId: 'number|optional',
-            assetId: 'number|optional'
+            assetId: 'number|optional',
+            identifier: 'string|optional'
         }
     });
     new ApiRoute(app, pageBlockRoute.specific, Method.DELETE, PageHandler.handle('deleteBlock'), {

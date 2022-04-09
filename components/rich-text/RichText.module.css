@@ -1,0 +1,6 @@
+.rich h2 {
+    font-size: var(--font-size-large);
+}
+.rich h3 {
+    font-size: var(--font-size-normal);
+}

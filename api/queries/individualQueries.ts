@@ -31,14 +31,17 @@ export const deleteIndividual = (individualId: number) =>
 
 const selectIndividualsQuery = `
     SELECT 
-           i.id, i.firstname, i.lastname, i.description, i.default_node_value AS defaultNodeValue, i.default_node_color AS defaultNodeColor,  i.description,
+           i.id, i.firstname, i.lastname, i.description, i.default_node_value AS defaultNodeValue, i.default_node_color AS defaultNodeColor,  i.description, 
+           CONCAT(i.lastname_slug,'-', i.lastname_slug) AS slug,
            a.path AS picture, a.thumbnail,
-           f.id AS flagId, f.name AS flagName, ifv.id as entityFlagId, fv.value AS flagValue, fv.id As flagValueId
+           f.id AS flagId, f.name AS flagName, ifv.id as entityFlagId, fv.value AS flagValue, fv.id As flagValueId,
+           p.path AS href
     FROM individuals i
     LEFT JOIN assets a ON a.id = i.asset_id
     LEFT JOIN entity_flag_values ifv on i.id = ifv.individual_id
     LEFT JOIN flags f ON f.id = ifv.flag_id
-    LEFT JOIN flag_values fv on ifv.flag_value_id = fv.id`;
+    LEFT JOIN flag_values fv on ifv.flag_value_id = fv.id
+    LEFT JOIN pages p ON p.individual_id = i.id`;
 
 export const selectIndividuals = () => selectIndividualsQuery;
 

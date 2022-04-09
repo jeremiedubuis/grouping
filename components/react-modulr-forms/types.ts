@@ -75,6 +75,7 @@ export type FieldComponentProps = {
     errors: (FieldError | string)[];
     validation?: ValidationType;
     componentRef: RefObject<any>;
+    setComponentRef: (value: any) => RefObject<any>;
 };
 
 export type SameNameFieldValuesHandler = (name: string, values: any[]) => { [name: string]: any };

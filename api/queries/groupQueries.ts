@@ -47,7 +47,8 @@ const groupSelectQuery = `
            i.id AS individualId, i.firstname, i.lastname,
            i_a.path AS individualPicture, i_a.thumbnail AS individualThumbnail,
            g2.id AS groupId, g2.name AS groupName, gt2.type AS groupType,
-           g2_a.path AS groupPicture, g2_a.thumbnail AS groupThumbnail
+           g2_a.path AS groupPicture, g2_a.thumbnail AS groupThumbnail,
+           p.path AS href
     FROM groups g
     LEFT JOIN assets g_a ON g.asset_id = g_a.id 
     INNER JOIN group_types gt on g.group_type_id = gt.id
@@ -57,6 +58,7 @@ const groupSelectQuery = `
     LEFT JOIN individuals i on l.individual2_id = i.id OR l.individual_id = i.id
     LEFT JOIN assets i_a ON i_a.id = i.asset_id
     LEFT JOIN group_types gt2 on g2.group_type_id = gt2.id
+    LEFT JOIN pages p On p.group_id = g.id
     WHERE g.id = :groupId`;
 
 export const groupSelect = (groupId: number) => sqlValues({ groupId }, groupSelectQuery);

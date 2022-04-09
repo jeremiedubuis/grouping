@@ -19,6 +19,6 @@ export class BlockModel extends Model {
         id: number
     ): Promise<{ id: number; path: string; mime_type: string; thumbnail?: string } | null> {
         const r = await this.query(blockAssetSelect(id));
-        return r?.[0];
+        return r?.[0].id ? r[0] : null;
     }
 }

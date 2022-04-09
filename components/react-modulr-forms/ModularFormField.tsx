@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { FormStore } from './FormStore';
 import { config, registeredTypes } from './config';
 import type { ElementType, ModularFormFieldProps } from './types';
@@ -24,6 +24,7 @@ export const ModularFormField: React.FC<ModularFormFieldProps> = ({
     wrapperProps = {},
     validation,
     disabled,
+    readOnly,
     errorMessages,
     value: _value = '',
     coerceType,
@@ -34,6 +35,9 @@ export const ModularFormField: React.FC<ModularFormFieldProps> = ({
     const [success, setSuccess] = useState(false);
     const [value, setValue] = useState(_value);
     const componentRef = useRef();
+    const setComponentRef = useCallback((node) => {
+        if (node) componentRef.current = node;
+    }, []);
 
     useEffect(() => {
         setValue(_value);
@@ -68,7 +72,7 @@ export const ModularFormField: React.FC<ModularFormFieldProps> = ({
         id,
         name,
         onChange: (e: ChangeEvent<ElementType>) => {
-            setValue(e.currentTarget.value);
+            setValue(registeredTypes[type].getValue(componentRef));
             onChange?.(e);
         },
         onFocus: (e: any) => {
@@ -87,9 +91,11 @@ export const ModularFormField: React.FC<ModularFormFieldProps> = ({
         'aria-invalid': !!errors,
         'aria-required': validation?.required,
         disabled,
+        readOnly,
         type,
         value,
         componentRef,
+        setComponentRef,
         errors,
         ...intrinsic
     };
@@ -106,6 +112,7 @@ export const ModularFormField: React.FC<ModularFormFieldProps> = ({
                 isFocused && 'is-focused',
                 (errorProp || errors.length > 0) && 'has-error',
                 validation && success && 'has-success',
+                readOnly && 'is-read-only',
                 extraClass
             )}
             {...wrapperProps}

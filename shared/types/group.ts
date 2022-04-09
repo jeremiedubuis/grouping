@@ -18,6 +18,7 @@ export type GroupPayload = BaseGroup & {
 
 export type Group = BaseGroup & {
     id: number;
+    href?: string;
 };
 
 export type GroupWithFlags = Group & {

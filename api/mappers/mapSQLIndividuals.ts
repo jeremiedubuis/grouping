@@ -16,6 +16,8 @@ export const mapSQLIndividuals = (results: RowDataPacket[]): IndividualWithFlags
                     description: row.description,
                     defaultNodeValue: row.defaultNodeValue,
                     defaultNodeColor: row.defaultNodeColor,
+                    slug: row.slug,
+                    href: row.href,
                     flags: {}
                 }) - 1
             ];

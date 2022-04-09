@@ -63,3 +63,9 @@
 .fieldError p {
     margin: 0;
 }
+
+.field:global(.is-read-only) select,.field:global(.is-read-only) input {
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+}

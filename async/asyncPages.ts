@@ -31,3 +31,7 @@ export const asyncPageBlockUpdate = (id: number, body: Partial<BlockPayload>) =>
         method: 'PUT',
         body
     });
+export const asyncPageBlockDelete = (id: number) =>
+    apiFetch(pathWithParams(pageBlockRoute.specific, { id: id.toString() }), {
+        method: 'DELETE'
+    });

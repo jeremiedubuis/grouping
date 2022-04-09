@@ -6,8 +6,10 @@ import { Layout } from '$components/layout/Layout';
 import { registerColorPicker } from '$components/forms/ColorPicker/ColorPicker';
 import { asyncMenuFetch } from '../async/asyncMenu';
 import { MenuLink } from '$types/menuLink';
+import { registerQuill } from '$components/forms/Quill/Quill';
 
 registerColorPicker();
+registerQuill();
 
 function App({ Component, pageProps, props }: AppProps & { props: { menu: MenuLink[] } }) {
     const { pathname } = useRouter();

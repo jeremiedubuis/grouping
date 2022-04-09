@@ -4,6 +4,7 @@ import { BoNav } from './Nav/BoNav';
 import { useRouter } from 'next/router';
 import { asyncLoginFromToken } from '../../async/asyncUser';
 import { MenuLink } from '$types/menuLink';
+import Head from 'next/head';
 
 export const BoLayout: React.FC<{ menu: MenuLink[] }> = ({ children }) => {
     const [loaded, setLoaded] = useState(false);
@@ -21,6 +22,9 @@ export const BoLayout: React.FC<{ menu: MenuLink[] }> = ({ children }) => {
     }, []);
     return (
         <>
+            <Head>
+                <link rel="stylesheet" href="/quill.snow.css" />
+            </Head>
             <div className={styles.layout}>
                 {loaded && pathname !== '/bo/login' && <BoNav />}
                 {loaded ? children : 'Loading'}

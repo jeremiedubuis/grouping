@@ -17,6 +17,8 @@ export type IndividualPayload = BaseIndividual & {
 
 export type Individual = BaseIndividual & {
     id: number;
+    href?: string;
+    slug: string;
 };
 
 export type IndividualUpdatePayload = Partial<IndividualPayload> & {

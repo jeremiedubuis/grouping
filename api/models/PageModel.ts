@@ -1,5 +1,5 @@
 import { Model } from '$models/Model';
-import { PagePayload } from '$types/page';
+import { DetailedPage, PagePayload } from '$types/page';
 import {
     pageDelete,
     pageInsert,
@@ -10,7 +10,7 @@ import {
 } from '$queries/pageQueries';
 import { RowDataPacket } from 'mysql2';
 
-const mapPages = (r) =>
+const mapPages = (r): DetailedPage[] =>
     r.reduce((acc, curr) => {
         const page =
             acc.find(({ id }: any) => curr.id === id) ||
@@ -23,10 +23,40 @@ const mapPages = (r) =>
                         title: curr.meta_title,
                         description: curr.meta_description
                     },
+                    settings: [],
                     template: curr.template,
+                    individual: curr.individual_id
+                        ? {
+                              id: curr.individual_id,
+                              firstname: curr.individual_firstname,
+                              lastname: curr.individual_lastname,
+                              slug: curr.individual_slug,
+                              picture: curr.individual_picture,
+                              thumbnail: curr.individual_thumbnail,
+                              description: curr.individual_description
+                          }
+                        : null,
+                    group: curr.group_id
+                        ? {
+                              id: curr.group_id,
+                              name: curr.group_name,
+                              slug: curr.group_slug,
+                              picture: curr.group_picture,
+                              thumbnail: curr.group_thumbnail,
+                              description: curr.group_description
+                          }
+                        : null,
                     blocks: []
                 }) - 1
             ];
+
+        if (curr.setting_name) {
+            page.settings.push({
+                id: curr.setting_id,
+                name: curr.setting_name,
+                data: curr.setting_data
+            });
+        }
 
         if (curr.block_id && !page.blocks.find((b) => b.id === curr.block_id)) {
             page.blocks.push({
@@ -36,7 +66,8 @@ const mapPages = (r) =>
                 text: curr.block_text,
                 link: curr.link_text ? { text: curr.link_text, href: curr.link_href } : null,
                 asset: curr.block_asset,
-                mapId: curr.block_map_id
+                mapId: curr.block_map_id,
+                identifier: curr.block_identifier
             });
         }
 
