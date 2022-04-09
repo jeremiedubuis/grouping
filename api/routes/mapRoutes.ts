@@ -8,7 +8,8 @@ export const createRoutes = (app: any) => {
     new ApiRoute(app, mapRoutes.specific, Method.GET, MapHandler.handle('selectMap'), {
         params: {
             id: 'string'
-        }
+        },
+        allowDisconnected: true
     });
     new ApiRoute(app, mapRoutes.single, Method.POST, MapHandler.handle('createMap'), {
         body: {
