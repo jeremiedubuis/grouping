@@ -27,11 +27,20 @@ export const FormPage: React.FC<FormMapProps> = ({
     const [pageType, setPageType] = useState<string>(
         data.individual ? 'individual' : data.group ? 'group' : 'simple'
     );
+    const [path, setPath] = useState<string>(data?.path);
 
     useEffect(() => {
         asyncIndividualsFetch().then(setIndividuals);
         asyncGroupsFetch().then(setGroups);
     }, []);
+
+    useEffect(() => {
+        if (pageType === 'group' && groups)
+            return setPath(`/groupes/${groups.filter((i) => !i.href)[0].slug}`);
+        if (pageType === 'individual' && individuals)
+            return setPath(`/personnalites/${individuals.filter((i) => !i.href)[0].slug}`);
+        setPath('');
+    }, [pageType]);
 
     const content = (
         <>
@@ -41,13 +50,8 @@ export const FormPage: React.FC<FormMapProps> = ({
                 type={ModularFieldType.Text}
                 name="path"
                 label="Chemin de la page"
-                value={
-                    data.individual
-                        ? `/personalites/${data.individual.slug}`
-                        : data.group
-                        ? `/groupes/${data.group.slug}`
-                        : data?.path
-                }
+                value={path}
+                onChange={(e) => setPath(e.currentTarget.value)}
                 readOnly={pageType !== 'simple'}
                 validation={{ required: true }}
             />
@@ -71,14 +75,22 @@ export const FormPage: React.FC<FormMapProps> = ({
                     name="individualId"
                     type={ModularFieldType.Select}
                     readOnly={!!data.id}
-                    value={data.individual?.id}
+                    value={data.individual?.id || individuals?.[0].id}
                     label="Personnalité"
+                    onChange={(e) => {
+                        console.log(e.currentTarget.value, individuals);
+                        const i = individuals?.find(
+                            (i) => i.id === parseInt(e.currentTarget.value)
+                        ) as IndividualWithFlags;
+                        console.log(i);
+                        setPath(`/personnalites/${i.slug}`);
+                    }}
                     coerceType="int"
                 >
                     {individuals
                         ?.filter((i) => !i.href)
                         .map((i) => (
-                            <option key={i.id}>
+                            <option key={i.id} value={i.id}>
                                 {i.firstname} {i.lastname}
                             </option>
                         ))}
@@ -94,11 +106,19 @@ export const FormPage: React.FC<FormMapProps> = ({
                     value={data.group?.id}
                     label="Group"
                     coerceType="int"
+                    onChange={(e) => {
+                        const g = groups?.find(
+                            (g) => g.id === parseInt(e.currentTarget.value)
+                        ) as GroupWithFlags;
+                        setPath(`/groupes/${g.slug}`);
+                    }}
                 >
                     {groups
                         ?.filter((g) => !g.href)
                         .map((g) => (
-                            <option key={g.id}>{g.name}</option>
+                            <option key={g.id} value={g.id}>
+                                {g.name}
+                            </option>
                         ))}
                 </ModularFormField>
             )}

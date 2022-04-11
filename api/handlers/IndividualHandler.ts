@@ -26,8 +26,8 @@ export class IndividualHandler extends Handler {
             req.body.assetId = asset.id;
         }
 
-        const id = await new IndividualModel().create(req.body);
-        return this.success({ id }, 201);
+        const { id, slug } = await new IndividualModel().create(req.body);
+        return this.success({ id, slug }, 201);
     }
 
     async update(req: Request) {

@@ -20,7 +20,7 @@ export class GroupModel extends Model {
         try {
             const nameSlug = slugify(payload.name);
             const { insertId } = await this.query(groupInsert(payload, nameSlug));
-            return insertId;
+            return { id: insertId, slug: nameSlug };
         } catch (e) {
             if ((e as QueryError).code === 'ER_DUP_ENTRY') {
                 throw new ApiError({ message: 'GROUP_EXISTS' }, 409);
@@ -52,6 +52,7 @@ export class GroupModel extends Model {
                     name: curr.name,
                     type: curr.type,
                     picture: curr.picture,
+                    slug: curr.slug,
                     groups: [],
                     individuals: []
                 };

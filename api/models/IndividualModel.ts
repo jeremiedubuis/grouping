@@ -34,17 +34,20 @@ export class IndividualModel extends Model {
 
     async create(payload: IndividualPayload) {
         try {
+            const firstnameSlug = slugify(payload.firstname);
+            const lastnameSlug = slugify(payload.lastname);
             const { insertId } = await this.query(
                 insertIndividual(payload, {
-                    firstnameSlug: slugify(payload.firstname),
-                    lastnameSlug: slugify(payload.lastname)
+                    firstnameSlug,
+                    lastnameSlug
                 })
             );
-            return insertId;
+            return { id: insertId, slug: `${lastnameSlug}-${firstnameSlug}` };
         } catch (e) {
             if ((e as QueryError).code === 'ER_DUP_ENTRY') {
                 throw new ApiError({ message: 'INDIVIDUAL_EXISTS' }, 409);
             }
+            throw e;
         }
     }
 

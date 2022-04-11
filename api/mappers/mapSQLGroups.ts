@@ -17,6 +17,7 @@ export const mapSQLGroups = (results: RowDataPacket[]): GroupWithFlags[] => {
                     href: row.href,
                     defaultNodeValue: row.defaultNodeValue,
                     defaultNodeColor: row.defaultNodeColor,
+                    slug: row.slug,
                     flags: {}
                 }) - 1
             ];

@@ -32,7 +32,7 @@ export const deleteIndividual = (individualId: number) =>
 const selectIndividualsQuery = `
     SELECT 
            i.id, i.firstname, i.lastname, i.description, i.default_node_value AS defaultNodeValue, i.default_node_color AS defaultNodeColor,  i.description, 
-           CONCAT(i.lastname_slug,'-', i.lastname_slug) AS slug,
+           CONCAT(i.lastname_slug,'-', i.firstname_slug) AS slug,
            a.path AS picture, a.thumbnail,
            f.id AS flagId, f.name AS flagName, ifv.id as entityFlagId, fv.value AS flagValue, fv.id As flagValueId,
            p.path AS href

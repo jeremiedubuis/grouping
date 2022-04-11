@@ -15,8 +15,8 @@ export class GroupHandler extends Handler {
             );
             req.body.assetId = asset.id;
         }
-        const id = await new GroupModel().create(req.body);
-        return this.success({ id }, 201);
+        const { id, slug } = await new GroupModel().create(req.body);
+        return this.success({ id, slug }, 201);
     }
 
     async update(req: Request) {

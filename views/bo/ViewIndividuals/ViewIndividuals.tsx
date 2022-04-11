@@ -36,8 +36,8 @@ export const ViewIndividuals: React.FC = () => {
                 className={styles.form}
                 onSubmit={(e: any, data: any) => {
                     e.preventDefault();
-                    asyncIndividualCreate(data).then(({ id }) => {
-                        setIndividuals([...individuals, { ...data, id, flags: {} }]);
+                    asyncIndividualCreate(data).then(({ id, slug }) => {
+                        setIndividuals([...individuals, { ...data, id, slug, flags: {} }]);
                     });
                 }}
             />

@@ -42,12 +42,13 @@ export const ViewGroups = () => {
                 onSubmit={(e: any, data: GroupPayload) => {
                     e.preventDefault();
                     if (typeof groups === 'undefined') return;
-                    asyncGroupCreate(data).then(({ id }) =>
+                    asyncGroupCreate(data).then(({ id, slug }) =>
                         setGroups([
                             ...groups,
                             {
                                 id,
                                 name: data.name,
+                                slug,
                                 type: data.type,
                                 defaultNodeValue: data.defaultNodeValue,
                                 flags: {}

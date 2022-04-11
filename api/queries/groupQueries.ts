@@ -31,7 +31,7 @@ const groupDeleteQuery = `
 export const groupDelete = (id: string) => sqlValues({ id }, groupDeleteQuery);
 
 export const groupsSelect = () => `
-    SELECT g.id, g.name, g.default_node_value AS defaultNodeValue, g.default_node_color AS defaultNodeColor,
+    SELECT g.id, g.name, g.default_node_value AS defaultNodeValue, g.default_node_color AS defaultNodeColor, g.name_slug AS slug,
            gt.type, 
            a.path AS picture, a.thumbnail AS thumbnail,
            f.id AS flagId, f.name AS flagName, ifv.id as entityFlagId, fv.value AS flagValue, fv.id As flagValueId
