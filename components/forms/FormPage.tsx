@@ -39,7 +39,7 @@ export const FormPage: React.FC<FormMapProps> = ({
             return setPath(`/groupes/${groups.filter((i) => !i.href)[0].slug}`);
         if (pageType === 'individual' && individuals)
             return setPath(`/personnalites/${individuals.filter((i) => !i.href)[0].slug}`);
-        setPath('');
+        setPath(data?.path || '');
     }, [pageType]);
 
     const content = (
