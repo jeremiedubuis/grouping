@@ -55,7 +55,7 @@ export const ViewPage: React.FC<{ id: number }> = ({ id }) => {
                     page={page}
                     formId={formId}
                     onSubmit={onSubmit}
-                    blockIdentifierContraints={['intro', 'map']}
+                    blockIdentifierContraints={['rich-text', 'map']}
                 />
             );
             break;

@@ -46,7 +46,7 @@ export const Template: React.FC<TemplateProps & { deleteBlock: (id: number) => v
                                 props.maps = maps;
                                 break;
                         }
-                        console.log(Component);
+                        console.log(template, Component);
 
                         return (
                             <li key={i}>
@@ -71,7 +71,7 @@ export const Template: React.FC<TemplateProps & { deleteBlock: (id: number) => v
                                     name={`${props.namePrefix}identifier`}
                                     value={template}
                                 />
-                                <Component {...props} />
+                                {Component && <Component {...props} />}
                             </li>
                         );
                     })}
