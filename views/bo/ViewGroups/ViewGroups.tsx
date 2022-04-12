@@ -1,7 +1,6 @@
 import styles from './ViewGroups.module.css';
 import React, { useEffect, useState } from 'react';
 import {
-    asyncGroupCreate,
     asyncGroupDelete,
     asyncGroupsFetch,
     asyncGroupTypeCreate,
@@ -9,20 +8,19 @@ import {
 } from '../../../async/asyncGroups';
 import type { Group, GroupType, GroupWithFlags } from '$types/group';
 import { FiEdit, FiFlag, FiLink, FiTrash } from 'react-icons/fi';
-import { ModalLinks } from '../../../components/layout/Modal/ModalLinks/ModalLinks';
-import { FormGroup } from '../../../components/forms/FormGroup';
-import { GroupPayload } from '$types/group';
-import { List } from '../../../components/lists/List/List';
-import { ModalGroupEdit } from '../../../components/layout/Modal/ModalGroupEdit';
-import { ModalConfirmDelete } from '../../../components/layout/Modal/ModalConfirmDelete';
-import { ModalEntityFlags } from '../../../components/layout/Modal/ModalEntityFlags/ModalEntityFlags';
+import { ModalLinks } from '$components/layout/Modal/ModalLinks/ModalLinks';
+import { List } from '$components/lists/List/List';
+import { ModalGroup } from '$components/layout/Modal/ModalGroup';
+import { ModalConfirmDelete } from '$components/layout/Modal/ModalConfirmDelete';
+import { ModalEntityFlags } from '$components/layout/Modal/ModalEntityFlags/ModalEntityFlags';
 import { FormGroupType } from '$components/forms/FormGroupType';
+import { Buttons } from '$components/buttons/Buttons/Buttons';
 
 export const ViewGroups = () => {
     const [modalLinksOpen, setModalLinksOpen] = useState<Group | null>(null);
     const [groups, setGroups] = useState<GroupWithFlags[]>();
     const [groupTypes, setGroupTypes] = useState<GroupType[]>([]);
-    const [groupToEdit, setGroupToEdit] = useState<Group | null>(null);
+    const [groupModal, setGroupModal] = useState<Group | null | boolean>(null);
     const [deleteCallback, setDeleteCallback] = useState<Function | null>(null);
     const [groupFlagsToEdit, setGroupFlagsToEdit] = useState<GroupWithFlags | null>(null);
 
@@ -35,30 +33,15 @@ export const ViewGroups = () => {
         <main className={styles.view}>
             <h1>Groups</h1>
 
-            <FormGroup
-                className={styles.form}
-                submitText={'Créer'}
-                groupTypes={groupTypes}
-                onSubmit={(e: any, data: GroupPayload) => {
-                    e.preventDefault();
-                    if (typeof groups === 'undefined') return;
-                    asyncGroupCreate(data).then(({ id, slug }) =>
-                        setGroups([
-                            ...groups,
-                            {
-                                id,
-                                name: data.name,
-                                slug,
-                                type: data.type,
-                                defaultNodeValue: data.defaultNodeValue,
-                                flags: {}
-                            }
-                        ])
-                    );
-                }}
+            <Buttons
+                buttons={[
+                    {
+                        children: 'Créer un groupe',
+                        onClick: () => setGroupModal(true)
+                    }
+                ]}
+                headerButtons
             />
-
-            <h2>Groupes</h2>
 
             <List
                 items={
@@ -75,7 +58,7 @@ export const ViewGroups = () => {
                             },
                             {
                                 icon: <FiEdit />,
-                                onClick: () => setGroupToEdit(g)
+                                onClick: () => setGroupModal(g)
                             },
                             {
                                 icon: <FiLink />,
@@ -133,15 +116,18 @@ export const ViewGroups = () => {
                 />
             )}
 
-            {groups && groupToEdit && (
-                <ModalGroupEdit
-                    group={groupToEdit}
+            {groups && groupModal && (
+                <ModalGroup
+                    group={typeof groupModal !== 'boolean' ? groupModal : undefined}
                     groupTypes={groupTypes}
-                    close={() => setGroupToEdit(null)}
+                    close={() => setGroupModal(null)}
+                    createGroup={(group) => {
+                        setGroups([...groups, group]);
+                    }}
                     updateGroup={(group) => {
                         setGroups(
                             groups.map((g) => {
-                                if (g.id !== groupToEdit.id) return g;
+                                if (g.id !== group.id) return g;
                                 return { ...g, ...group };
                             })
                         );

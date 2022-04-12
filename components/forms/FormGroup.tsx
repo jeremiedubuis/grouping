@@ -76,7 +76,7 @@ export const FormGroup: React.FC<FormGroupProps> = ({
                 name="description"
                 label="Description"
                 value={data.description}
-                type={ModularFieldType.Textarea}
+                type={'Quill'}
             />
             <ModularFormField
                 formId={id}

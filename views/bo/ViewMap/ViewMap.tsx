@@ -4,18 +4,14 @@ import { asyncIndividualsFetch } from '../../../async/asyncIndividuals';
 import { Individual } from '$types/individual';
 import { Group } from '$types/group';
 import { asyncGroupsFetch } from '../../../async/asyncGroups';
-import {
-    asyncMapEntryCreate,
-    asyncMapEntryDelete,
-    asyncMapFetch,
-    asyncMapFillFromGroupId,
-    asyncMapFillFromIndividualId
-} from '../../../async/asyncMaps';
-import { FormMapEntry } from '$components/forms/FormMapEntry';
+import { asyncMapEntryDelete, asyncMapFetch } from '../../../async/asyncMaps';
 import { List } from '$components/lists/List/List';
 import { FiTrash } from 'react-icons/fi';
 import { ModalConfirmDelete } from '$components/layout/Modal/ModalConfirmDelete';
-import { FormMapFillFromEntity } from '$components/forms/FormMapFillFromEntity';
+import { ModalMapEntry } from '$components/layout/Modal/ModalMapEntry';
+import { Buttons } from '$components/buttons/Buttons/Buttons';
+import { ModalMapAutoFill } from '$components/layout/Modal/ModalMapAutoFill';
+import { ButtonTheme } from '$components/buttons/Button/Button';
 type ViewMapProps = {
     id: number;
 };
@@ -24,6 +20,8 @@ export const ViewMap: React.FC<ViewMapProps> = ({ id }) => {
     const [map, setMap] = useState<DetailedMap>();
     const [individuals, setIndividuals] = useState<Individual[]>();
     const [groups, setGroups] = useState<Group[]>();
+    const [modalMapEntryOpen, setModalMapEntryOpen] = useState(false);
+    const [modalMapAutoFillOpen, setModalMapAutoFillOpen] = useState(false);
     const [deleteCallback, setDeleteCallback] = useState<Function | null>(null);
 
     useEffect(() => {
@@ -36,44 +34,18 @@ export const ViewMap: React.FC<ViewMapProps> = ({ id }) => {
     return (
         <main>
             <h1>Carte: {map.name}</h1>
-            {individuals && groups && (
-                <>
-                    <h2>Ajouter une entrée</h2>
-                    <FormMapEntry
-                        onSubmit={(e, data) => {
-                            e.preventDefault();
-                            asyncMapEntryCreate(data).then(({ id }) => {
-                                const entityKey = data.groupId ? 'groups' : 'individuals';
-                                const entity = data.groupId
-                                    ? groups.find((g) => g.id === data.groupId)
-                                    : individuals.find((i) => i.id === data.individualId);
-                                setMap({
-                                    ...map,
-                                    [entityKey]: [...map[entityKey], { entry_id: id, ...entity }]
-                                });
-                            });
-                        }}
-                        submitText={'Ajouter'}
-                        mapId={id}
-                        groups={groups}
-                        individuals={individuals}
-                    />
 
-                    <h2>Auto-remplissage</h2>
-                    <FormMapFillFromEntity
-                        onSubmit={(e, { individualId, groupId }) => {
-                            e.preventDefault();
-                            if (individualId)
-                                asyncMapFillFromIndividualId(id, individualId).then(setMap);
-                            else asyncMapFillFromGroupId(id, groupId).then(setMap);
-                        }}
-                        submitText={'Remplir'}
-                        mapId={id}
-                        groups={groups}
-                        individuals={individuals}
-                    />
-                </>
-            )}
+            <Buttons
+                buttons={[
+                    { children: 'Ajouter une entrée', onClick: () => setModalMapEntryOpen(true) },
+                    {
+                        children: 'Auto-remplissage',
+                        onClick: () => setModalMapAutoFillOpen(true),
+                        theme: ButtonTheme.Primary
+                    }
+                ]}
+                headerButtons
+            />
 
             <h2>Individus</h2>
             <List
@@ -136,6 +108,39 @@ export const ViewMap: React.FC<ViewMapProps> = ({ id }) => {
                     close={() => setDeleteCallback(null)}
                     onSubmit={deleteCallback}
                 />
+            )}
+
+            {groups && individuals && (
+                <>
+                    {modalMapEntryOpen && (
+                        <ModalMapEntry
+                            close={() => setModalMapEntryOpen(false)}
+                            groups={groups.filter(
+                                (g) => !map?.groups.find(({ id }) => id === g.id)
+                            )}
+                            individuals={individuals.filter(
+                                (i) => !map?.individuals.find(({ id }) => id === i.id)
+                            )}
+                            mapId={id}
+                            createMapEntry={(isGroup, entry) => {
+                                const entityKey = isGroup ? 'groups' : 'individuals';
+                                setMap({
+                                    ...map,
+                                    [entityKey]: [...map[entityKey], entry]
+                                });
+                            }}
+                        />
+                    )}
+                    {modalMapAutoFillOpen && (
+                        <ModalMapAutoFill
+                            close={() => setModalMapAutoFillOpen(false)}
+                            groups={groups}
+                            individuals={individuals}
+                            mapId={id}
+                            setMap={setMap}
+                        />
+                    )}
+                </>
             )}
         </main>
     );

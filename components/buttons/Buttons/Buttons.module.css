@@ -12,6 +12,7 @@
 .headerButtons {
     margin: 20px 0;
     display: block;
+    max-width: none;
 }
 
 .headerButtons button {

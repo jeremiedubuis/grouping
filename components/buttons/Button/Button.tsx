@@ -6,10 +6,9 @@ export enum ButtonTheme {
     Primary = 'primary',
     Secondary = 'secondary'
 }
+export type ButtonProps = React.HTMLAttributes<HTMLButtonElement> & { theme?: ButtonTheme };
 
-export const Button: React.FC<
-    React.HTMLAttributes<HTMLButtonElement> & { theme?: ButtonTheme }
-> = ({ children, className, theme, ...props }) => (
+export const Button: React.FC<ButtonProps> = ({ children, className, theme, ...props }) => (
     <button className={cn(className, styles.button, theme && styles[theme])} {...props}>
         {children}
     </button>
