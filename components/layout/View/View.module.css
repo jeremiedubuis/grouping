@@ -26,6 +26,7 @@
 }
 
 .view h1 a {
+    padding-right: 46px;
     color: black;
     text-decoration: none;
 }
@@ -35,11 +36,12 @@
     position: absolute;
     top: 1px;
     left: 1px;
-    font-size: 3.1rem;
+    font-size: 3rem;
     background: linear-gradient(-45deg, #eeaa52, #e73c6f, #2394d5, #2af3b7);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-stroke: 8px transparent;
+    padding: 0 10px 0 0;
     color: #fff;
 }
 
