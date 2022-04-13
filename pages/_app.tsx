@@ -7,6 +7,7 @@ import { registerColorPicker } from '$components/forms/ColorPicker/ColorPicker';
 import { asyncMenuFetch } from '../async/asyncMenu';
 import { MenuLink } from '$types/menuLink';
 import { registerQuill } from '$components/forms/Quill/Quill';
+import Head from 'next/head';
 
 registerColorPicker();
 registerQuill();
@@ -16,6 +17,9 @@ function App({ Component, pageProps, props }: AppProps & { props: { menu: MenuLi
     const Wrapper = /\/bo$|\/bo\/.*/.test(pathname) ? BoLayout : Layout;
     return (
         <Wrapper menu={props.menu}>
+            <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
             <Component {...pageProps} />
         </Wrapper>
     );

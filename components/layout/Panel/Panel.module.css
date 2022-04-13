@@ -4,7 +4,7 @@
     to { opacity: 1;}
 }
 .panel {
-    position: absolute;
+    position: fixed;
     top: var(--header-height);
     width: 300px;
     right: -300px;
@@ -21,7 +21,7 @@
 }
 
 .button {
-    position: absolute;
+    position: fixed;
     top: calc(var(--header-height) + 20px);
     right: 320px;
     border: 0;
@@ -34,4 +34,21 @@
 .button svg {
     width: 30px;
     height: 30px;
+}
+
+
+@media screen and (max-width: 750px) {
+    .panel {
+        width: 100%;
+        right: -100%;
+    }
+
+    .panelOpen {
+        right: 0;
+    }
+
+    .button {
+        right: 10px;
+        z-index: 3;
+    }
 }
